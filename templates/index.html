@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +8,20 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23F26A4B%22>S</text></svg>">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'bgdark': '#0D0D0D',
-                        'textlight': '#F2F2F2',
-                        'accentorg': '#F26A4B',
-                        'accentgrn': '#BED984',
-                        'accentgld': '#A68A56'
+                        'bgdark': 'var(--color-bg)',     
+                        'textlight': 'var(--color-text)',  
+                        'accentorg': 'var(--color-org)',  
+                        'accentgrn': 'var(--color-grn)',  
+                        'accentgld': 'var(--color-gld)'   
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
@@ -29,225 +29,255 @@
         }
     </script>
     <style>
-        body {
-            background-color: #0D0D0D;
-            color: #F2F2F2;
+        :root {
+            --color-bg: #0D0D0D;
+            --color-text: #F2F2F2;
+            --color-org: #F26A4B;
+            --color-grn: #BED984;
+            --color-gld: #A68A56;
+            --glass-bg: rgba(166, 138, 86, 0.05);
+            --glass-border: rgba(166, 138, 86, 0.2);
         }
 
-        .glass-card {
-            background: rgba(166, 138, 86, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(166, 138, 86, 0.2);
-            border-radius: 24px;
+        html[data-theme='light'] {
+            --color-bg: #F9FAFB;       
+            --color-text: #18181B;     
+            --color-org: #D95336;      
+            --color-grn: #6A8E23;      
+            --color-gld: #8B7347;      
+            --glass-bg: rgba(139, 115, 71, 0.1);
+            --glass-border: rgba(139, 115, 71, 0.3);
         }
 
-        .tab-btn {
-            padding: 12px 24px;
-            transition: all 0.3s;
-            border-bottom: 2px solid transparent;
-            color: rgba(242, 242, 242, 0.6);
+        body { 
+            background-color: var(--color-bg); 
+            color: var(--color-text); 
+            transition: background-color 0.4s ease, color 0.4s ease; 
         }
 
-        .tab-btn:hover {
-            color: #F2F2F2;
+        .glass-card { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 24px; 
+            transition: all 0.4s ease;
         }
+        
+        .tab-btn { padding: 12px 24px; transition: all 0.3s; border-bottom: 2px solid transparent; color: var(--color-gld); opacity: 0.7; }
+        .tab-btn:hover { opacity: 1; }
+        .tab-active { border-bottom: 3px solid var(--color-org); color: var(--color-text); font-weight: bold; opacity: 1;}
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--color-gld); border-radius: 10px; }
 
-        .tab-active {
-            border-bottom: 3px solid #F26A4B;
-            color: #F2F2F2;
-            font-weight: bold;
-        }
+        .ia-formatada p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .ia-formatada strong { font-weight: 800; color: var(--color-org); }
+        .ia-formatada ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .ia-formatada ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .ia-formatada li { margin-bottom: 0.25rem; }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
+        .privacidade-blur { filter: blur(12px); opacity: 0.5; user-select: none; pointer-events: none; transition: all 0.3s ease; }
+        .ocultavel { transition: all 0.3s ease; }
 
-        ::-webkit-scrollbar-track {
-            background: transparent;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: #A68A56;
-            border-radius: 10px;
-        }
-
-        .ia-formatada p {
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-
-        .ia-formatada strong {
-            font-weight: 800;
-            color: #F26A4B;
-        }
-
-        .ia-formatada ul {
-            list-style-type: disc;
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .ia-formatada ol {
-            list-style-type: decimal;
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .ia-formatada li {
-            margin-bottom: 0.25rem;
-        }
-
-        .privacidade-blur {
-            filter: blur(10px);
-            opacity: 0.6;
-            user-select: none;
-            transition: all 0.3s ease;
-        }
-
-        .ocultavel {
-            transition: all 0.3s ease;
-        }
+        .animate-in { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-1 { animation-delay: 0.15s; opacity: 0; }
+        .delay-2 { animation-delay: 0.3s; opacity: 0; }
+        .delay-3 { animation-delay: 0.45s; opacity: 0; }
     </style>
 </head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
 
-<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
+    <div class="absolute top-4 right-4 md:top-8 md:right-8 animate-in z-50">
+        <button onclick="toggleTema()" class="text-accentgld hover:text-accentorg transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none" title="Alternar Tema">
+            <i data-lucide="sun" id="iconeTema" class="w-6 h-6"></i>
+        </button>
+    </div>
 
-    <div class="max-w-5xl w-full space-y-8">
+    <div class="max-w-5xl w-full mx-auto space-y-8 p-4 md:p-8 flex-1">
+        
+        <div class="text-center space-y-2 pt-4 relative animate-in">
+        
+        <div class="flex-1 space-y-8">
+            <div class="text-center space-y-2 pt-4 relative animate-in">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Smart <span class="text-accentorg">Fatura</span> IA</h1>
+                <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
+            </div>
 
-        <div class="text-center space-y-2 pt-4 relative">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Smart <span
-                    class="text-accentorg">Fatura</span> IA</h1>
-            <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
-        </div>
-
-        <div id="uploadArea"
-            class="glass-card p-12 text-center border-dashed border-2 border-accentgld hover:border-accentorg transition-colors cursor-pointer mt-10"
-            onclick="document.getElementById('fileInput').click()">
-            <i data-lucide="upload-cloud" class="w-16 h-16 mx-auto mb-4 text-accentgrn"></i>
-            <p class="text-[12px] text-accentgld/50 mt-4 text-center max-w-xs mx-auto">
-                <i data-lucide="shield-check" class="w-3 h-3 inline mr-1"></i>
-                Seus dados são processados apenas em memória e não são armazenados em nosso servidor.
-            </p>
-            <h3 class="text-xl font-semibold mb-2">Carregue sua fatura</h3>
-            <p class="text-accentgld text-sm">Arraste ou clique para enviar (.csv ou .pdf)</p>
-            <input type="file" id="fileInput" class="hidden" accept=".csv, .pdf" onchange="enviarArquivo()">
-        </div>
-
-        <div id="loading"
-            class="hidden text-center text-accentgrn animate-pulse py-10 font-semibold flex flex-col items-center">
-            <i data-lucide="loader-2" class="w-10 h-10 mb-4 animate-spin"></i>
-            Analisando dados e estruturando valores...
-        </div>
-
-        <div id="dashboard" class="hidden space-y-6">
-
-            <nav class="flex justify-between items-center border-b border-accentgld/20 pb-2">
-                <div class="flex gap-2 md:gap-8">
-                    <button onclick="mudarAba('dash')" id="btnDash" class="tab-btn tab-active text-sm md:text-base">📊
-                        Dashboard</button>
-                    <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">🤖 Chat com a
-                        IA</button>
-                </div>
-
-                <div class="flex items-center gap-2 md:gap-4">
-                    <button onclick="togglePrivacidade()"
-                        class="text-accentgld hover:text-accentorg transition-colors p-2 rounded-full hover:bg-accentgld/10"
-                        title="Ocultar valores na tela">
-                        <i data-lucide="eye" id="iconePrivacidade" class="w-5 h-5 md:w-6 md:h-6"></i>
-                    </button>
-
-                    <button onclick="location.reload()"
-                        class="bg-accentgld/10 hover:bg-accentgld/30 text-accentgld border border-accentgld/30 px-4 py-2 rounded-xl font-bold transition-all text-xs md:text-sm flex items-center gap-2">
-                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Nova Fatura
-                    </button>
-                </div>
-            </nav>
-
-            <div id="abaDash" class="space-y-6 animate-in fade-in duration-500">
-
-                <div
-                    class="glass-card p-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
-                    <div>
-                        <p class="text-accentgld uppercase tracking-widest text-sm font-bold">Total Gasto</p>
-                        <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00
-                        </h2>
-                    </div>
-                    <div class="bg-accentgrn text-bgdark px-4 py-2 rounded-lg font-bold shadow-lg shadow-accentgrn/20">
-                        Análise Concluída
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="glass-card p-6 h-[450px] flex flex-col">
-                        <h3 class="text-accentgld font-semibold mb-4 text-center">Distribuição de Gastos</h3>
-                        <div class="flex-1 relative ocultavel" id="containerGrafico">
-                            <canvas id="graficoPizza"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="glass-card p-6 h-[450px] flex flex-col">
-                        <h3 class="text-accentgld font-semibold mb-4 text-center">Top 10 Maiores Despesas</h3>
-                        <div class="flex-1 overflow-y-auto pr-2">
-                            <table class="w-full text-left text-sm">
-                                <thead
-                                    class="text-accentgld/70 uppercase text-[10px] tracking-wider border-b border-accentgld/20">
-                                    <tr>
-                                        <th class="pb-2">Local</th>
-                                        <th class="pb-2 text-right">Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabelaGastos" class="divide-y divide-accentgld/10 text-textlight">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div id="uploadArea" class="glass-card p-12 text-center border-dashed border-2 border-accentgld hover:border-accentorg transition-colors cursor-pointer mt-10 animate-in delay-1" onclick="document.getElementById('fileInput').click()">
+                <i data-lucide="upload-cloud" class="w-16 h-16 mx-auto mb-4 text-accentgrn"></i>
+                <h3 class="text-xl font-semibold mb-2">Carregue sua fatura</h3>
+                <p class="text-accentgld text-sm">Arraste ou clique para enviar (.csv ou .pdf)</p>
+                <input type="file" id="fileInput" class="hidden" accept=".csv, .pdf" onchange="enviarArquivo()">
+                
+                <div class="mt-4 flex items-center justify-center gap-2 text-accentgld/60 text-[11px]">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-accentgrn"></i>
+                    <span>Processamento seguro: Seus dados não são armazenados.</span>
                 </div>
             </div>
 
-            <div id="abaChat"
-                class="hidden glass-card p-6 h-[700px] flex flex-col animate-in slide-in-from-bottom-4 duration-500">
-                <div class="border-b border-accentgld/20 pb-4 mb-4 flex items-center gap-3">
-                    <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-bgdark"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
-                        <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
-                    </div>
+            <div id="beneficios" class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center animate-in delay-2">
+                <div class="space-y-2">
+                    <div class="text-accentorg flex justify-center"><i data-lucide="scan-line" class="w-6 h-6"></i></div>
+                    <h4 class="font-bold text-sm text-textlight">Leitura Inteligente</h4>
+                    <p class="text-xs text-accentgld/70 leading-relaxed">Extraímos automaticamente os dados de faturas PDF ou CSV.</p>
                 </div>
-
-                <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
-                    <div
-                        class="bg-accentgld/10 border border-accentgld/20 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada">
-                        Olá! Fatura analisada com sucesso. O que você gostaria de saber?
-                    </div>
+                <div class="space-y-2">
+                    <div class="text-accentgrn flex justify-center"><i data-lucide="pie-chart" class="w-6 h-6"></i></div>
+                    <h4 class="font-bold text-sm text-textlight">Gráficos de Gastos</h4>
+                    <p class="text-xs text-accentgld/70 leading-relaxed">Visualize para onde seu dinheiro está indo com precisão.</p>
                 </div>
-
-                <div class="flex gap-2 bg-bgdark p-2 rounded-2xl border border-accentgld/30 mt-auto">
-                    <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?"
-                        class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
-                    <button onclick="perguntarIA()"
-                        class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-bgdark">
-                        <i data-lucide="send" class="w-6 h-6"></i>
-                    </button>
+                <div class="space-y-2">
+                    <div class="text-accentorg flex justify-center"><i data-lucide="messages-square" class="w-6 h-6"></i></div>
+                    <h4 class="font-bold text-sm text-textlight">Consultoria via IA</h4>
+                    <p class="text-xs text-accentgld/70 leading-relaxed">Tire dúvidas sobre seus hábitos financeiros com nosso chat.</p>
                 </div>
             </div>
 
+            <div id="loading" class="hidden text-center text-accentgrn animate-pulse py-10 font-semibold flex flex-col items-center">
+                <i data-lucide="loader-2" class="w-10 h-10 mb-4 animate-spin"></i>
+                Analisando dados e estruturando valores...
+            </div>
+            
+            <div id="dashboard" class="hidden space-y-6">
+                
+                <nav class="flex justify-between items-center pb-2">
+                    <div class="flex gap-2 md:gap-8">
+                        <button onclick="mudarAba('dash')" id="btnDash" class="tab-btn tab-active text-sm md:text-base">📊 Dashboard</button>
+                        <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">🤖 Chat com a IA</button>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <button onclick="togglePrivacidade()" class="text-accentgld hover:text-accentorg transition-colors p-2 rounded-full hover:bg-accentgld/10" title="Ocultar valores na tela">
+                            <i data-lucide="eye" id="iconePrivacidade" class="w-5 h-5 md:w-6 md:h-6"></i>
+                        </button>
+
+                        <button onclick="location.reload()" class="bg-accentgld text-bgdark hover:opacity-90 px-4 py-2 rounded-lg font-bold shadow-lg shadow-accentgld/20 transition-all text-xs md:text-sm flex items-center gap-2">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i> <span class="hidden md:inline">Nova Fatura</span>
+                        </button>
+                    </div>
+                </nav>
+
+                <div id="abaDash" class="space-y-6 animate-in fade-in duration-500">
+                    <div class="glass-card p-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
+                        <div>
+                            <p class="text-accentgld uppercase tracking-widest text-sm font-bold">Total Gasto</p>
+                            <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00</h2>
+                        </div>
+                        <div class="bg-accentgrn text-bgdark px-4 py-2 rounded-lg font-bold shadow-lg shadow-accentgrn/20">
+                            Análise Concluída
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="glass-card p-6 h-[450px] flex flex-col">
+                            <h3 class="text-accentgld font-semibold mb-4 text-center">Distribuição de Gastos</h3>
+                            <div class="flex-1 relative ocultavel" id="containerGrafico">
+                                <canvas id="graficoPizza"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6 h-[450px] flex flex-col">
+                            <h3 class="text-accentgld font-semibold mb-4 text-center">Top 10 Maiores Despesas</h3>
+                            <div class="flex-1 overflow-y-auto pr-2">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="text-accentgld/70 uppercase text-[10px] tracking-wider mb-2 block">
+                                        <tr class="flex justify-between w-full">
+                                            <th class="pb-2">Local</th>
+                                            <th class="pb-2 text-right">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelaGastos" class="text-textlight w-full block">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="abaChat" class="hidden glass-card p-6 h-[700px] flex flex-col animate-in slide-in-from-bottom-4 duration-500">
+                    <div class="border-b border-accentgld/20 pb-4 mb-4 flex items-center gap-3">
+                        <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-white"></i></div>
+                        <div>
+                            <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
+                            <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
+                        </div>
+                    </div>
+                    
+                    <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
+                        <div class="bg-accentgld/10 border border-accentgld/20 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel">
+                            Olá! Fatura analisada com sucesso. O que você gostaria de saber?
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2 bg-bgdark p-2 rounded-2xl border border-accentgld/30 mt-auto shadow-inner">
+                        <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?" class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
+                        <button onclick="perguntarIA()" class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-white shadow-lg">
+                            <i data-lucide="send" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        </div> </div> <footer class="w-full mt-auto py-5 animate-in delay-3" style="border-top: 1px solid #A58955;">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center x-4 md:px-8 gap-3">
+            
+            <div class="text-left text-center">
+                <p class="text-[10px] text-textlight/50 font-medium tracking-wide">
+                    <span class="font-bold text-textlight/70">Smart Fatura AI</span> é um produto intelectual de João Quinteiro
+                </p>
+                <p class="text-[9px] text-textlight/40 font-mono mt-0.5">
+                    &copy; 2026-2026
+                </p>
+            </div>
+            
+        </div>
+    </footer>
     </div>
 
     <script>
-        lucide.createIcons();
-        let contextoFatura = "";
-        let resumoMatematico = "";
-        let meuGrafico = null;
+        function inicializarTema() {
+            const temaSalvo = localStorage.getItem('smartfatura_tema') || 'dark';
+            document.documentElement.setAttribute('data-theme', temaSalvo);
+            atualizarIconeTema(temaSalvo);
+        }
 
+        function toggleTema() {
+            const temaAtual = document.documentElement.getAttribute('data-theme');
+            const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', novoTema);
+            localStorage.setItem('smartfatura_tema', novoTema);
+            atualizarIconeTema(novoTema);
+            
+            if(meuGrafico) { meuGrafico.update(); }
+        }
+
+        function atualizarIconeTema(tema) {
+            const icone = document.getElementById('iconeTema');
+            if (icone) {
+                icone.setAttribute('data-lucide', tema === 'dark' ? 'sun' : 'moon');
+                lucide.createIcons();
+            }
+        }
+
+        inicializarTema(); 
+        lucide.createIcons();
+        
+        let contextoFatura = ""; 
+        let resumoMatematico = ""; 
+        let meuGrafico = null; 
         let privacidadeAtiva = false;
 
         function togglePrivacidade() {
             privacidadeAtiva = !privacidadeAtiva;
             const icone = document.getElementById('iconePrivacidade');
             const elementosParaOcultar = document.querySelectorAll('.ocultavel');
-
+            
             if (privacidadeAtiva) {
                 icone.setAttribute('data-lucide', 'eye-off');
                 elementosParaOcultar.forEach(el => el.classList.add('privacidade-blur'));
@@ -270,6 +300,7 @@
             if (!file) return;
 
             document.getElementById('uploadArea').classList.add('hidden');
+            document.getElementById('beneficios').classList.add('hidden');
             document.getElementById('loading').classList.remove('hidden');
 
             const formData = new FormData();
@@ -283,17 +314,17 @@
                 document.getElementById('dashboard').classList.remove('hidden');
 
                 if (data.sucesso) {
-                    if (data.tipo === 'csv' || data.tipo === 'pdf_estruturado') {
-                        document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-                        contextoFatura = JSON.stringify(data.dados);
+                    if(data.tipo === 'csv' || data.tipo === 'pdf_estruturado') {
+                        document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                        contextoFatura = JSON.stringify(data.dados); 
                         gerarVisuais(data.dados);
                         mudarAba('dash');
                     } else if (data.tipo === 'pdf') {
                         document.getElementById('valorTotal').innerText = "Analisado!";
-                        document.getElementById('containerGrafico').innerHTML = "<p class='text-center text-accentgld mt-10'>Gráficos disponíveis apenas para CSV no momento.</p>";
-                        document.getElementById('tabelaGastos').innerHTML = "<tr><td colspan='2' class='py-4 text-center text-accentgld'>Processado via Inteligência Artificial. Acesse o chat!</td></tr>";
+                        document.getElementById('containerGrafico').innerHTML = "<p class='text-center text-accentgld mt-10'>Gráficos detalhados otimizados apenas para CSV.</p>";
+                        document.getElementById('tabelaGastos').innerHTML = "<tr><td colspan='2' class='py-4 text-center text-accentgld'>Fatura lida. Acesse o chat ao lado!</td></tr>";
                         contextoFatura = data.texto_extraido;
-                        resumoMatematico = "Fatura em PDF (Totais exatos não disponíveis, extraia a partir do texto).";
+                        resumoMatematico = "Fatura em texto bruto. Extraia os valores da conversa.";
                         mudarAba('chat');
                     }
                 } else {
@@ -311,19 +342,19 @@
             dadosCSV.forEach(item => {
                 const cat = item.Categoria ? item.Categoria.toUpperCase() : 'OUTROS';
                 const val = parseFloat(item.Valor) || 0;
-                if (val > 0) { categorias[cat] = (categorias[cat] || 0) + val; }
+                if(val > 0) { categorias[cat] = (categorias[cat] || 0) + val; }
             });
 
-            resumoMatematico = "RESUMO DOS TOTAIS POR CATEGORIA (Valores Exatos):\n";
+            resumoMatematico = "RESUMO DOS TOTAIS POR CATEGORIA:\n";
             for (const [cat, val] of Object.entries(categorias)) {
-                resumoMatematico += `- ${cat}: R$ ${val.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}\n`;
+                resumoMatematico += `- ${cat}: R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n`;
             }
 
             const labels = Object.keys(categorias);
             const valores = Object.values(categorias);
             const coresGrafico = ['#8C52FF', '#00E5FF', '#FFDE59', '#FF914D', '#FF5757', '#00BF63', '#CB6CE6'];
 
-            if (meuGrafico) meuGrafico.destroy();
+            if(meuGrafico) meuGrafico.destroy();
             const ctx = document.getElementById('graficoPizza').getContext('2d');
             meuGrafico = new Chart(ctx, {
                 type: 'doughnut',
@@ -331,7 +362,21 @@
                     labels: labels,
                     datasets: [{ data: valores, backgroundColor: coresGrafico, borderWidth: 0, hoverOffset: 10 }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#F2F2F2', font: { family: 'Inter' } } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { 
+                        legend: { 
+                            position: 'right', 
+                            labels: { 
+                                color: function() {
+                                    return getComputedStyle(document.documentElement).getPropertyValue('--color-text').trim();
+                                },
+                                font: {family: 'Inter', size: 12} 
+                            } 
+                        } 
+                    } 
+                }
             });
 
             const gastosOrdenados = [...dadosCSV]
@@ -341,16 +386,14 @@
 
             const tabelaBody = document.getElementById('tabelaGastos');
             tabelaBody.innerHTML = '';
-
-            // Verifica se o modo privacidade está ativo para já embaçar a tabela ao criar
             const classeBlur = privacidadeAtiva ? 'privacidade-blur' : '';
 
             gastosOrdenados.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-accentgld/5 transition-colors";
+                tr.className = "hover:bg-accentgld/5 transition-colors flex justify-between w-full py-2";
                 tr.innerHTML = `
-                    <td class="py-3 font-medium">${item.Lançamento || item.Descricao || 'Sem nome'} <br> <span class="text-xs text-accentgld">${item.Categoria || ''}</span></td>
-                    <td class="py-3 text-right font-bold text-accentorg ocultavel ${classeBlur}">R$ ${parseFloat(item.Valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                    <td class="font-medium text-textlight w-2/3">${item.Lançamento || item.Descricao || 'Lançamento'} <br> <span class="text-xs text-accentgld font-bold">${item.Categoria || ''}</span></td>
+                    <td class="text-right font-black text-accentorg w-1/3 flex items-center justify-end ocultavel ${classeBlur}">R$ ${parseFloat(item.Valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                 `;
                 tabelaBody.appendChild(tr);
             });
@@ -359,11 +402,13 @@
         async function perguntarIA() {
             const input = document.getElementById('pergunta');
             const chatBox = document.getElementById('chatBox');
-            if (!input.value) return;
+            if(!input.value) return;
 
             const pergunta = input.value;
+            const classeBlur = privacidadeAtiva ? 'privacidade-blur' : '';
+            
             chatBox.innerHTML += `
-                <div class="bg-accentorg text-bgdark p-4 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold text-base shadow-lg">
+                <div class="bg-accentorg text-white p-4 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold text-base shadow-lg ocultavel ${classeBlur}">
                     ${pergunta}
                 </div>`;
             input.value = "";
@@ -375,19 +420,12 @@
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        pergunta: pergunta,
-                        contexto: contextoFatura,
-                        resumo: resumoMatematico
-                    })
+                    body: JSON.stringify({ pergunta: pergunta, contexto: contextoFatura, resumo: resumoMatematico })
                 });
                 const data = await response.json();
-
+                
                 document.getElementById('digitando').remove();
-
                 const respostaFormatada = marked.parse(data.resposta);
-
-                const classeBlur = privacidadeAtiva ? 'privacidade-blur' : '';
 
                 chatBox.innerHTML += `
                     <div class="bg-accentgld/10 border border-accentgld/20 p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight ia-formatada text-base shadow-lg mt-2 ocultavel ${classeBlur}">
@@ -400,13 +438,9 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        document.getElementById("pergunta").addEventListener("keypress", function (event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                perguntarIA();
-            }
+        document.getElementById("pergunta").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") { event.preventDefault(); perguntarIA(); }
         });
     </script>
 </body>
-
 </html>

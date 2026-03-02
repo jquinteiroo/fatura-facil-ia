@@ -94,7 +94,7 @@ def processar():
             {texto_pdf}
             """
             
-            resposta_ia = model.generate_content(prompt_extracao)
+            resposta_ia = gerar_conteudo_com_rodizio(prompt_extracao)
 
             texto_limpo = resposta_ia.text.strip()
             match = re.search(r'\[.*\]', texto_limpo, re.DOTALL)
@@ -120,7 +120,7 @@ def chat():
     contexto = dados.get('contexto', '')
     resumo = dados.get('resumo', '') 
     
-    if not MINHA_CHAVE_GEMINI:
+    if not CHAVES_ATIVAS:
          return jsonify({'resposta': 'Erro: API Key do Gemini não configurada no servidor.'})
     
     prompt = f"""
@@ -136,7 +136,7 @@ def chat():
     """
     
     try:
-        resposta = model.generate_content(prompt)
+        resposta = gerar_conteudo_com_rodizio(prompt)
         return jsonify({'resposta': resposta.text})
     except Exception as e:
         return jsonify({'resposta': f"Erro ao gerar resposta da IA: {str(e)}"})
