@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fatura IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        // Aplicando a sua nova paleta de cores!
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'navy': '#011140',       /* Fundo Principal */
+                        'bright': '#0439D9',     /* Botões Principais */
+                        'light': '#5086F2',      /* Destaques/Gráficos */
+                        'muted': '#758EBF',      /* Bordas e Subtítulos */
+                        'offwhite': '#F2F2F2'    /* Textos */
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #011140; color: #F2F2F2; }
+        .glass-card { 
+            background: rgba(117, 142, 191, 0.1); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(117, 142, 191, 0.2); 
+            border-radius: 24px; 
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-8">
+
+    <div class="max-w-4xl w-full space-y-8">
+        <div class="text-center space-y-2">
+            <h1 class="text-5xl font-extrabold text-light">Smart Fatura IA</h1>
+            <p class="text-muted">Análise inteligente de faturas (CSV ou PDF)</p>
+        </div>
+
+        <div class="glass-card p-12 text-center border-dashed border-2 border-muted hover:border-light transition-colors cursor-pointer" onclick="document.getElementById('fileInput').click()">
+            <i data-lucide="upload-cloud" class="w-16 h-16 mx-auto mb-4 text-light"></i>
+            <h3 class="text-xl font-semibold mb-2">Selecione sua fatura</h3>
+            <p class="text-muted text-sm">Arraste ou clique para enviar (.csv ou .pdf)</p>
+            <input type="file" id="fileInput" class="hidden" accept=".csv, .pdf" onchange="enviarArquivo()">
+        </div>
+
+        <div id="loading" class="hidden text-center text-light animate-pulse">Analisando documento...</div>
+        
+        <div id="dashboard" class="hidden space-y-6">
+            <div class="glass-card p-8 flex justify-between items-center">
+                <div>
+                    <p class="text-muted uppercase tracking-widest text-sm">Total da Fatura</p>
+                    <h2 id="valorTotal" class="text-4xl font-bold text-offwhite">R$ 0,00</h2>
+                </div>
+                <div class="bg-bright text-offwhite px-4 py-2 rounded-lg font-semibold">Fatura Lida</div>
+            </div>
+
+            <div class="glass-card p-8 h-64 flex flex-col">
+                <h3 class="text-lg font-semibold text-light mb-4">Chatbot Financeiro</h3>
+                <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-2 text-sm">
+                    <div class="text-muted">A IA está pronta para responder perguntas sobre a sua fatura!</div>
+                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="pergunta" placeholder="Onde gastei mais?" class="flex-1 bg-[#011140] border border-muted rounded-xl px-4 py-2 text-offwhite outline-none focus:border-light">
+                    <button onclick="perguntarIA()" class="bg-bright hover:bg-light px-6 py-2 rounded-xl transition-colors font-bold"><i data-lucide="send" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        let contextoFatura = ""; // Guarda os dados para a IA ler
+
+        async function enviarArquivo() {
+            const file = document.getElementById('fileInput').files[0];
+            if (!file) return;
+
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/processar', { method: 'POST', body: formData });
+                const data = await response.json();
+
+                if (data.sucesso) {
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    
+                    if(data.tipo === 'csv') {
+                        document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                        contextoFatura = JSON.stringify(data.dados.slice(0, 20)); // Manda amostra pra IA
+                    } else if (data.tipo === 'pdf') {
+                        document.getElementById('valorTotal').innerText = "Analisado via IA";
+                        contextoFatura = data.texto_extraido;
+                    }
+                } else {
+                    alert('Erro: ' + data.erro);
+                }
+            } catch (err) {
+                alert('Erro na conexão com o servidor.');
+            }
+        }
+
+        async function perguntarIA() {
+            const input = document.getElementById('pergunta');
+            const chatBox = document.getElementById('chatBox');
+            if(!input.value) return;
+
+            const pergunta = input.value;
+            chatBox.innerHTML += `<div class="bg-bright text-offwhite p-3 rounded-lg ml-auto max-w-[80%]">${pergunta}</div>`;
+            input.value = "";
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pergunta: pergunta, contexto: contextoFatura })
+            });
+            const data = await response.json();
+            
+            chatBox.innerHTML += `<div class="bg-muted/20 border border-muted p-3 rounded-lg max-w-[80%]">${data.resposta}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
