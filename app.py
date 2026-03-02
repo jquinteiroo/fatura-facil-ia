@@ -177,7 +177,7 @@ else:
             st.error("⚠️ Insira sua chave API na linha 8 do código para habilitar o chat.")
         else:
             genai.configure(api_key=MINHA_CHAVE_GEMINI)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.5-flash')
             
             pergunta = st.chat_input("Digite sua pergunta financeira...")
             if pergunta:
