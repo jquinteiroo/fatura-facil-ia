@@ -80,7 +80,7 @@ def processar():
             prompt_extracao = f"Extraia as transações desta fatura em JSON: {texto_pdf}. Use chaves: Lançamento, Categoria, Valor."
             
             # Chama a IA
-            resposta_ia = chamar_ia_com_rodizio(prompt_extracao)
+            resposta_ia = gerar_conteudo_com_rodizio(prompt_extracao)
             
             # --- REDE DE SEGURANÇA AQUI ---
             if not resposta_ia:
