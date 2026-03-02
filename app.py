@@ -8,16 +8,36 @@ import re
 
 app = Flask(__name__)
 
-MINHA_CHAVE_GEMINI = os.environ.get("GEMINI_API_KEY", "")
-if MINHA_CHAVE_GEMINI:
-    genai.configure(api_key=MINHA_CHAVE_GEMINI)
-    model = genai.GenerativeModel('gemini-3-flash-preview')
+CHAVES_API = [
+    os.environ.get("GEMINI_API_KEY_1", ""),
+    os.environ.get("GEMINI_API_KEY_2", ""),
+    os.environ.get("GEMINI_API_KEY_3", "")
+]
+
+CHAVES_ATIVAS = [k for k in CHAVES_API if k]
+
+def gerar_conteudo_com_rodizio(prompt):
+    """Tenta usar as chaves uma por uma caso o limite seja atingido"""
+    for chave in CHAVES_ATIVAS:
+        try:
+            genai.configure(api_key=chave)
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            resposta = model.generate_content(prompt)
+            return resposta
+        except Exception as e:
+            
+            if "429" in str(e):
+                print(f"Limite atingido na chave atual, tentando a próxima...")
+                continue
+            else:
+                raise e 
+    return None
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/processar', methods=['POST'])
+@app.route('/processar', methods=['POST'])  
 def processar():
     if 'file' not in request.files:
         return jsonify({'erro': 'Nenhum arquivo enviado'})
