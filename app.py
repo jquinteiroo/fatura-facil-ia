@@ -21,7 +21,7 @@ def gerar_conteudo_com_rodizio(prompt):
     for chave in CHAVES_ATIVAS:
         try:
             genai.configure(api_key=chave)
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            model = genai.GenerativeModel('gemini-2.5-flash')
             resposta = model.generate_content(prompt)
             return resposta
         except Exception as e:
@@ -75,33 +75,27 @@ def processar():
 
         elif filename.endswith('.pdf'):
             leitor = PyPDF2.PdfReader(file)
-            texto_pdf = ""
-            for pagina in leitor.pages:
-                texto_pdf += pagina.extract_text() + "\n"
-
-            prompt_extracao = f"""
-            Você é um assistente financeiro. Leia a fatura abaixo e extraia TODAS as transações (compras e despesas).
-            Ignore pagamentos da própria fatura.
-            Retorne APENAS um array JSON. Sem formatação markdown, apenas o colchete inicial e final.
-            Categorias sugeridas: SUPERMERCADO, RESTAURANTE, TRANSPORTE, SERVICOS, SAUDE, EDUCACAO, ENTRETENIMENTO, COMPRAS, OUTROS.
+            texto_pdf = "".join([p.extract_text() for p in leitor.pages])
             
-            Formato OBRIGATÓRIO:
-            [
-              {{"Lançamento": "Nome do local", "Categoria": "NOME DA CATEGORIA", "Valor": 150.50}}
-            ]
+            prompt_extracao = f"Extraia as transações desta fatura em JSON: {texto_pdf}. Use chaves: Lançamento, Categoria, Valor."
             
-            Texto da fatura:
-            {texto_pdf}
-            """
+            # Chama a IA
+            resposta_ia = chamar_ia_com_rodizio(prompt_extracao)
             
-            resposta_ia = gerar_conteudo_com_rodizio(prompt_extracao)
-
-            texto_limpo = resposta_ia.text.strip()
-            match = re.search(r'\[.*\]', texto_limpo, re.DOTALL)
-            if match:
-                dados_pdf = json.loads(match.group(0))
-            else:
+            # --- REDE DE SEGURANÇA AQUI ---
+            if not resposta_ia:
+                return jsonify({'erro': 'Nenhuma chave da API configurada ou limite de requisições excedido.'})
+            # ------------------------------
+            
+            try:
+                # Tenta encontrar os colchetes do JSON na resposta
+                texto_limpo = re.search(r'\[.*\]', resposta_ia.text, re.DOTALL).group(0)
                 dados_pdf = json.loads(texto_limpo)
+                total_pdf = sum(float(item.get('Valor', 0)) for item in dados_pdf)
+                    
+                return jsonify({'sucesso': True, 'tipo': 'pdf_estruturado', 'dados': dados_pdf, 'total': total_pdf})
+            except Exception as e:
+                return jsonify({'erro': f'A IA não retornou um formato válido. Tente novamente. Detalhe: {str(e)}'})
 
             total_pdf = sum(float(item.get('Valor', 0)) for item in dados_pdf)
                 
