@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import google.generativeai as genai
+import os
 
-# ==========================================
-# 1. CONFIGURAÇÃO E CHAVE IA
-# ==========================================
-MINHA_CHAVE_GEMINI = "COLE_SUA_API_KEY_AQUI"
+# Puxa a chave do "cofre" do Render (Variáveis de Ambiente)
+MINHA_CHAVE_GEMINI = os.environ.get("GEMINI_API_KEY", "")
 st.set_page_config(page_title="Smart Fatura IA", page_icon="💳", layout="wide")
 
 # ==========================================
