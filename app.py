@@ -1,3 +1,5 @@
+import requests
+import gc
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import google.generativeai as genai
@@ -8,7 +10,7 @@ import re
 import csv
 import os
 from datetime import datetime
-import requests
+
 
 app = Flask(__name__)
 
@@ -79,7 +81,17 @@ def processar():
 
         elif filename.endswith('.pdf'):
             leitor = PyPDF2.PdfReader(file)
-            texto_pdf = "".join([p.extract_text() for p in leitor.pages])
+            texto_pdf = "".join([p.extract_text() for p in leitor.pages if p.extract_text()])
+            
+            if len(texto_pdf) > 15000:
+                texto_pdf = texto_pdf[:15000]
+                print("Aviso: Texto do PDF foi cortado para economizar memória.")
+            
+            # 2. Apaga o leitor de PDF da memória RAM imediatamente
+            del leitor 
+            
+            # 3. Chama o caminhão de lixo do Python para liberar espaço para o Gemini
+            gc.collect()
             
             prompt_extracao = f"""Você é um extrator de dados financeiros de altíssima precisão.
 Extraia TODAS as transações (compras e despesas) do texto da fatura abaixo.
