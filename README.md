@@ -1,8 +1,8 @@
-# 🚀 Smart Fatura IA
+# 🚀 Fatura Facil IA
 
 > **Inteligência financeira ao seu alcance.** Transforme faturas complexas de cartão de crédito em insights claros e converse com uma IA especializada sobre os seus gastos.
 
-O **Smart Fatura IA** é uma aplicação web Open Source desenvolvida para devolver o controle financeiro aos usuários. Através da leitura inteligente de faturas (PDF ou CSV) e integração com Inteligência Artificial, o sistema categoriza gastos, gera gráficos visuais e oferece um consultor financeiro interativo em formato de chat.
+O **Fatura Facil IA** é uma aplicação web Open Source desenvolvida para devolver o controle financeiro aos usuários. Através da leitura inteligente de faturas (PDF ou CSV) e integração com Inteligência Artificial, o sistema categoriza gastos, gera gráficos visuais e oferece um consultor financeiro interativo em formato de chat.
 
 ---
 
@@ -24,8 +24,6 @@ Atualmente, a extração de dados funciona perfeitamente com faturas dos seguint
 * Mercado Pago
 * Banco Inter
 * Sicredi
-
-*(Seu banco não está na lista? Você pode sugerir a inclusão direto na plataforma ou abrir um Pull Request!)*
 
 ---
 
