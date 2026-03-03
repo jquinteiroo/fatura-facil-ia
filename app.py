@@ -22,21 +22,50 @@ CHAVES_API = [ # Chaves de API da IA
 
 CHAVES_ATIVAS = [k for k in CHAVES_API if k]
 
-def gerar_conteudo_com_rodizio(prompt): # Rodízio de chaves, para não parar de rodar
-    """Tenta usar as chaves uma por uma caso o limite seja atingido"""
-    for chave in CHAVES_ATIVAS:
+def gerar_conteudo_com_rodizio(prompt): 
+    print("🕵️ Iniciando contato com a IA...")
+    
+    # Puxa as chaves NA HORA EXATA do clique (e remove espaços acidentais)
+    chaves_agora = [
+        os.environ.get("GEMINI_API_KEY_1", "").strip(),
+        os.environ.get("GEMINI_API_KEY_2", "").strip(),
+        os.environ.get("GEMINI_API_KEY_3", "").strip()
+    ]
+    chaves_validas = [k for k in chaves_agora if k]
+
+    if not chaves_validas:
+        print("🚨 ERRO GRAVE: O servidor não encontrou as chaves nas Variáveis de Ambiente do Google!")
+        return None
+
+    url_base = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="
+    payload = {"contents": [{"parts": [{"text": prompt}]}]}
+
+    for chave in chaves_validas:
         try:
-            genai.configure(api_key=chave)
-            model = genai.GenerativeModel('gemini-2.5-flash')
-            resposta = model.generate_content(prompt)
-            return resposta
-        except Exception as e:
+            url = url_base + chave
+            resposta = requests.post(url, json=payload, timeout=40)
             
-            if "429" in str(e):
-                print(f"Limite atingido na chave atual, tentando a próxima...")
+            if resposta.status_code == 200:
+                dados = resposta.json()
+                texto_retorno = dados['candidates'][0]['content']['parts'][0]['text']
+                
+                class RespostaLeve:
+                    def __init__(self, texto):
+                        self.text = texto
+                print("✅ IA respondeu com sucesso!")
+                return RespostaLeve(texto_retorno)
+                
+            elif resposta.status_code == 429:
+                print(f"⚠️ Limite atingido na chave atual, tentando a próxima...")
                 continue
             else:
-                raise e 
+                print(f"❌ Erro do Gemini: {resposta.text}")
+                continue
+                
+        except Exception as e:
+            print(f"❌ Erro de conexão com a API: {e}")
+            continue 
+            
     return None
 
 @app.route('/')
