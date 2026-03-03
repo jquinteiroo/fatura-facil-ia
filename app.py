@@ -8,6 +8,7 @@ import re
 import csv
 import os
 from datetime import datetime
+import requests
 
 app = Flask(__name__)
 
