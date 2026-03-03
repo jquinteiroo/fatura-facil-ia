@@ -5,10 +5,13 @@ import PyPDF2
 import os
 import json
 import re
+import csv
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 
-CHAVES_API = [
+CHAVES_API = [ # Chaves de API da IA
     os.environ.get("GEMINI_API_KEY_1", ""),
     os.environ.get("GEMINI_API_KEY_2", ""),
     os.environ.get("GEMINI_API_KEY_3", "")
@@ -16,7 +19,7 @@ CHAVES_API = [
 
 CHAVES_ATIVAS = [k for k in CHAVES_API if k]
 
-def gerar_conteudo_com_rodizio(prompt):
+def gerar_conteudo_com_rodizio(prompt): # Rodízio de chaves, para não parar de rodar
     """Tenta usar as chaves uma por uma caso o limite seja atingido"""
     for chave in CHAVES_ATIVAS:
         try:
@@ -37,7 +40,7 @@ def gerar_conteudo_com_rodizio(prompt):
 def index():
     return render_template('index.html')
 
-@app.route('/processar', methods=['POST'])  
+@app.route('/processar', methods=['POST'])  # Processamento do arquivo da fatura
 def processar():
     if 'file' not in request.files:
         return jsonify({'erro': 'Nenhum arquivo enviado'})
@@ -77,37 +80,88 @@ def processar():
             leitor = PyPDF2.PdfReader(file)
             texto_pdf = "".join([p.extract_text() for p in leitor.pages])
             
-            prompt_extracao = f"Extraia as transações desta fatura em JSON: {texto_pdf}. Use chaves: Lançamento, Categoria, Valor."
+            prompt_extracao = f"""Você é um extrator de dados financeiros de altíssima precisão.
+Extraia TODAS as transações (compras e despesas) do texto da fatura abaixo.
+
+REGRAS ESTRITAS (Obrigatório):
+1. IGNORE TOTALMENTE pagamentos da própria fatura (ex: "PAGAMENTO DE FATURA", "SALDO ANTERIOR").
+2. IGNORE resumos, blocos de totais, juros e textos informativos.
+3. O campo "Valor" DEVE ser obrigatoriamente um número (float). Use PONTO para decimais. NUNCA inclua "R$" ou vírgula. Exemplo correto: 320.50
+4. Retorne APENAS um array JSON válido. Nenhuma palavra a mais, nem antes nem depois.
+
+Formato esperado:
+[
+  {{"Lançamento": "Nome do local", "Categoria": "NOME DA CATEGORIA", "Valor": 150.50}}
+]
+
+Texto da fatura:
+{texto_pdf}"""
             
-            # Chama a IA
             resposta_ia = gerar_conteudo_com_rodizio(prompt_extracao)
             
-            # --- REDE DE SEGURANÇA AQUI ---
             if not resposta_ia:
                 return jsonify({'erro': 'Nenhuma chave da API configurada ou limite de requisições excedido.'})
-            # ------------------------------
             
             try:
-                # Tenta encontrar os colchetes do JSON na resposta
                 texto_limpo = re.search(r'\[.*\]', resposta_ia.text, re.DOTALL).group(0)
                 dados_pdf = json.loads(texto_limpo)
-                total_pdf = sum(float(item.get('Valor', 0)) for item in dados_pdf)
+                # Formatação dos números, para prever erros
+                for item in dados_pdf:
+                    valor_bruto = str(item.get('Valor', '0')).upper().replace('R$', '').replace(' ', '').strip()
+                    
+                    # Converte para um formato de valor 
+                    if ',' in valor_bruto and '.' in valor_bruto:
+                        valor_bruto = valor_bruto.replace('.', '').replace(',', '.')
+                    elif ',' in valor_bruto:
+                        valor_bruto = valor_bruto.replace(',', '.')
+                        
+                    try:
+                        item['Valor'] = float(valor_bruto)
+                    except:
+                        item['Valor'] = 0.0
+                
+                # Soma com segurança
+                total_pdf = sum(item['Valor'] for item in dados_pdf)
                     
                 return jsonify({'sucesso': True, 'tipo': 'pdf_estruturado', 'dados': dados_pdf, 'total': total_pdf})
             except Exception as e:
                 return jsonify({'erro': f'A IA não retornou um formato válido. Tente novamente. Detalhe: {str(e)}'})
-
-            total_pdf = sum(float(item.get('Valor', 0)) for item in dados_pdf)
-                
-            return jsonify({'sucesso': True, 'tipo': 'pdf_estruturado', 'dados': dados_pdf, 'total': total_pdf})
-            
-        else:
-            return jsonify({'erro': 'Formato inválido. Use CSV ou PDF.'})
             
     except Exception as e:
         return jsonify({'erro': f"Erro interno ou IA falhou ao ler PDF: {str(e)}"})
 
-@app.route('/chat', methods=['POST'])
+@app.route('/sugerir_banco', methods=['POST']) # Formulário de sugestão
+def sugerir_banco():
+    dados = request.json
+    nome = dados.get('nome', 'Anônimo')
+    banco = dados.get('banco', 'Não informado')
+    contato = dados.get('contato', 'Nenhum')
+
+    data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    
+    # Planilha a ser criada
+    arquivo_csv = 'sugestoes_bancos.csv'
+    cabecalho_existe = os.path.isfile(arquivo_csv)
+    
+    # Abre o arquivo em modo 'a' para não apagar o que já tem
+    try:
+        with open(arquivo_csv, mode='a', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file, delimiter=';') 
+            
+            # Escreve o cabeçalho, quando arquivo novo
+            if not cabecalho_existe:
+                writer.writerow(['Data/Hora', 'Banco Sugerido', 'Nome', 'Contato'])
+            
+            # Escreve a sugestão
+            writer.writerow([data_hora, banco, nome, contato])
+            
+        print(f"✅ SALVO NA PLANILHA: {banco} por {nome}")
+        return jsonify({'sucesso': True})
+    except Exception as e:
+        print(f"Erro ao salvar na planilha: {e}")
+        return jsonify({'erro': 'Falha ao salvar'}), 500
+
+@app.route('/chat', methods=['POST']) # Rota para processar a pergunta feita pelo usuário
 def chat():
     dados = request.json
     pergunta = dados.get('pergunta', '')

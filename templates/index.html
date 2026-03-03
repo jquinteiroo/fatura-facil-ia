@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="bg-bgdark transition-colors duration-300">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,14 +88,21 @@
         .delay-1 { animation-delay: 0.15s; opacity: 0; }
         .delay-2 { animation-delay: 0.3s; opacity: 0; }
         .delay-3 { animation-delay: 0.45s; opacity: 0; }
+
     </style>
 </head>
-<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col relative overflow-x-hidden m-0 p-0 bg-bgdark text-textlight">
 
-    <div class="absolute top-4 right-4 md:top-8 md:right-8 animate-in z-50">
-        <button onclick="toggleTema()" class="text-accentgld hover:text-accentorg transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none" title="Alternar Tema">
-            <i data-lucide="sun" id="iconeTema" class="w-6 h-6"></i>
+    <div class="absolute top-4 right-4 md:top-8 md:right-8 animate-in z-50 flex items-center gap-2">
+        
+        <a href="https://github.com/jquinteiroo/WIS" target="_blank" class="text-accentgld hover:text-textlight transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center" title="Código Aberto no GitHub">
+            <i data-lucide="github" class="w-5 h-5 md:w-6 md:h-6"></i>
+        </a>
+
+        <button onclick="toggleTema()" class="text-accentgld hover:text-accentorg transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center" title="Alternar Tema">
+            <i data-lucide="sun" id="iconeTema" class="w-5 h-5 md:w-6 md:h-6"></i>
         </button>
+        
     </div>
 
     <div class="max-w-5xl w-full mx-auto space-y-8 p-4 md:p-8 flex-1">
@@ -104,9 +111,11 @@
         
         <div class="flex-1 space-y-8">
             <div class="text-center space-y-2 pt-4 relative animate-in">
+            <a href="http://127.0.0.1:5000/" class="inline-block hover:scale-105 transition-transform duration-300">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Smart <span class="text-accentorg">Fatura</span> IA</h1>
-                <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
-            </div>
+            </a>
+            <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
+        </div>
 
             <div id="uploadArea" class="glass-card p-12 text-center border-dashed border-2 border-accentgld hover:border-accentorg transition-colors cursor-pointer mt-10 animate-in delay-1" onclick="document.getElementById('fileInput').click()">
                 <i data-lucide="upload-cloud" class="w-16 h-16 mx-auto mb-4 text-accentgrn"></i>
@@ -137,7 +146,44 @@
                     <p class="text-xs text-accentgld/70 leading-relaxed">Tire dúvidas sobre seus hábitos financeiros com nosso chat.</p>
                 </div>
             </div>
+            <div class="mt-12 text-center animate-in delay-3">
+            <div id="bancosCompativeis" class="mt-12 text-center animate-in delay-3">
+            <p class="text-[10px] text-accentgld/50 uppercase tracking-widest mb-4 font-semibold">
+                Faturas testadas e otimizadas
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#8A05BE]/30 bg-[#8A05BE]/10 text-[#8A05BE] shadow-sm hover:bg-[#8A05BE]/20 transition-colors cursor-default" title="Faturas do Nubank">
+                    <i data-lucide="credit-card" class="w-3.5 h-3.5"></i>
+                    <span class="text-xs font-bold tracking-wide">Nubank</span>
+                </div>
 
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#009EE3]/30 bg-[#009EE3]/10 text-[#009EE3] shadow-sm hover:bg-[#009EE3]/20 transition-colors cursor-default" title="Faturas do Mercado Pago">
+                    <i data-lucide="handshake" class="w-3.5 h-3.5"></i>
+                    <span class="text-xs font-bold tracking-wide">Mercado Pago</span>
+                </div>
+                
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#FF7A00]/30 bg-[#FF7A00]/10 text-[#FF7A00] shadow-sm hover:bg-[#FF7A00]/20 transition-colors cursor-default" title="Faturas do Banco Inter">
+                    <i data-lucide="landmark" class="w-3.5 h-3.5"></i>
+                    <span class="text-xs font-bold tracking-wide">Inter</span>
+                </div>
+                
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[#32A041]/30 bg-[#32A041]/10 text-[#32A041] shadow-sm hover:bg-[#32A041]/20 transition-colors cursor-default" title="Faturas do Sicredi">
+                    <i data-lucide="trees" class="w-3.5 h-3.5"></i>
+                    <span class="text-xs font-bold tracking-wide">Sicredi</span>
+                </div>
+
+            </div>
+
+            <div class="mt-6">
+                <button onclick="abrirModalFeedback()" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-accentorg border border-accentorg hover:bg-white hover:text-accentorg transition-all duration-300 px-4 py-2 rounded-full cursor-pointer shadow-md">
+                    <i data-lucide="message-square-dashed" class="w-4 h-4"></i>
+                    Sua fatura deu erro? Sugira um novo banco
+                </button>
+            </div>
+        </div>
+        </div>
+        </div>
             <div id="loading" class="hidden text-center text-accentgrn animate-pulse py-10 font-semibold flex flex-col items-center">
                 <i data-lucide="loader-2" class="w-10 h-10 mb-4 animate-spin"></i>
                 Analisando dados e estruturando valores...
@@ -199,31 +245,35 @@
                     </div>
                 </div>
 
-                <div id="abaChat" class="hidden glass-card p-6 h-[700px] flex flex-col animate-in slide-in-from-bottom-4 duration-500">
-                    <div class="border-b border-accentgld/20 pb-4 mb-4 flex items-center gap-3">
-                        <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-white"></i></div>
-                        <div>
-                            <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
-                            <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
-                        </div>
-                    </div>
-                    
-                    <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
-                        <div class="bg-accentgld/10 border border-accentgld/20 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel">
-                            Olá! Fatura analisada com sucesso. O que você gostaria de saber?
-                        </div>
-                    </div>
-                    
-                    <div class="flex gap-2 bg-bgdark p-2 rounded-2xl border border-accentgld/30 mt-auto shadow-inner">
-                        <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?" class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
-                        <button onclick="perguntarIA()" class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-white shadow-lg">
-                            <i data-lucide="send" class="w-6 h-6"></i>
-                        </button>
+            <div id="abaChat" class="hidden glass-card p-6 h-[700px] flex flex-col animate-in slide-in-from-bottom-4 duration-500">
+                
+                <div class="pb-3 mb-4 flex items-center gap-3" style="border-bottom: 1px solid var(--glass-border);">
+                    <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-white"></i></div>
+                    <div>
+                        <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
+                        <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
                     </div>
                 </div>
+                
+                <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
+                    <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                        Olá! Fatura analisada com sucesso. O que você gostaria de saber?
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 bg-bgdark p-2 rounded-2xl mt-auto shadow-inner" style="border: 1px solid var(--glass-border);">
+                    <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?" class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
+                    <button onclick="perguntarIA()" class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-white shadow-lg">
+                        <i data-lucide="send" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
             </div>
         </div>
-
+        
+    </div>
+    </div>
+        
         </div> </div> <footer class="w-full mt-auto py-5 animate-in delay-3" style="border-top: 1px solid #A58955;">
         <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center x-4 md:px-8 gap-3">
             
@@ -238,6 +288,56 @@
             
         </div>
     </footer>
+    <div id="modalFeedback" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
+        <div class="glass-card p-6 w-11/12 max-w-sm animate-in zoom-in-95 duration-200 shadow-2xl">
+            
+            <div class="flex justify-between items-center mb-5 pb-3 border-b border-accentgld/20">
+                <h3 class="font-bold text-white text-lg flex items-center gap-2">
+                    <i data-lucide="lightbulb" class="w-5 h-5 text-accentorg"></i> Sugerir Banco
+                </h3>
+                <button onclick="fecharModalFeedback()" class="text-white hover:text-accentorg transition-colors p-1.5 rounded-full hover:bg-white/10">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div id="formFeedbackContent" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-accentgld uppercase tracking-widest mb-1.5">Qual banco tentou?</label>
+                    <input type="text" id="feedBanco" placeholder="Ex: Itaú, Bradesco..." class="w-full bg-bgdark border border-accentgld/20 text-textlight placeholder:text-textlight/40 outline-none focus:border-accentorg text-sm transition-all rounded-xl px-4 py-3 shadow-inner">
+                </div>
+                
+                <div>
+                    <label class="block text-[10px] font-bold text-accentgld uppercase tracking-widest mb-1.5">Seu Nome (Opcional)</label>
+                    <input type="text" id="feedNome" placeholder="Como podemos te chamar?" class="w-full bg-bgdark border border-accentgld/20 text-textlight placeholder:text-textlight/40 outline-none focus:border-accentorg text-sm transition-all rounded-xl px-4 py-3 shadow-inner">
+                </div>
+                
+                <label class="flex items-center gap-3 cursor-pointer mt-3 group p-3 rounded-xl border border-accentgld/20 bg-bgdark transition-all">
+                    <input type="checkbox" id="feedAvisar" onchange="toggleContato()" class="accent-accentorg w-4 h-4 cursor-pointer">
+                    <span class="text-xs font-medium text-textlight group-hover:text-accentorg transition-colors">Quero ser avisado quando lançar</span>
+                </label>
+
+                <div id="divContato" class="hidden transition-all duration-300">
+                    <label class="block text-[10px] font-bold text-accentgld uppercase tracking-widest mb-1.5 mt-3">E-mail ou WhatsApp</label>
+                    <input type="text" id="feedContato" placeholder="Para te avisarmos..." class="w-full bg-bgdark border border-accentgld/20 text-textlight placeholder:text-textlight/40 outline-none focus:border-accentorg text-sm transition-all rounded-xl px-4 py-3 shadow-inner">
+                </div>
+
+                <button id="btnEnviarFeedback" onclick="enviarFeedback()" class="w-full bg-accentorg hover:bg-[#ff7b5c] text-white font-bold py-3.5 rounded-xl transition-all shadow-lg mt-5 flex justify-center items-center gap-2 border-none">
+                    <i data-lucide="send" class="w-4 h-4"></i> Enviar Sugestão
+                </button>
+            </div>
+
+            <div id="msgSucessoFeedback" class="hidden flex-col items-center justify-center py-6 text-center space-y-3 animate-in zoom-in duration-300">
+                <div class="w-16 h-16 bg-[#32A041]/10 border border-[#32A041]/30 rounded-full flex items-center justify-center text-[#32A041] mb-2 shadow-inner">
+                    <i data-lucide="check-circle" class="w-8 h-8"></i>
+                </div>
+                <h4 class="font-bold text-textlight text-xl">Obrigado!</h4>
+                <p class="text-xs text-textlight/80 font-medium px-2">Sua sugestão foi registrada. Vamos trabalhar para adicionar esse banco o mais rápido possível.</p>
+                <button onclick="fecharModalFeedback()" class="mt-5 px-6 py-3 bg-bgdark border border-accentgld/30 text-textlight hover:text-accentorg hover:border-accentorg rounded-xl text-xs transition-colors font-bold w-full">
+                    Fechar Janela
+                </button>
+            </div>
+
+        </div>
     </div>
 
     <script>
@@ -301,6 +401,10 @@
 
             document.getElementById('uploadArea').classList.add('hidden');
             document.getElementById('beneficios').classList.add('hidden');
+            
+            const bancos = document.getElementById('bancosCompativeis');
+            if(bancos) bancos.classList.add('hidden');
+
             document.getElementById('loading').classList.remove('hidden');
 
             const formData = new FormData();
@@ -408,9 +512,12 @@
             const classeBlur = privacidadeAtiva ? 'privacidade-blur' : '';
             
             chatBox.innerHTML += `
-                <div class="bg-accentorg text-white p-4 rounded-2xl rounded-tr-none ml-auto max-w-[85%] font-bold text-base shadow-lg ocultavel ${classeBlur}">
-                    ${pergunta}
+                <div class="flex justify-end w-full mt-4">
+                    <div class="bg-accentorg text-white p-4 rounded-2xl rounded-tr-none max-w-[85%] text-base shadow-lg ocultavel ${classeBlur}">
+                        ${pergunta}
+                    </div>
                 </div>`;
+                
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -428,11 +535,13 @@
                 const respostaFormatada = marked.parse(data.resposta);
 
                 chatBox.innerHTML += `
-                    <div class="bg-accentgld/10 border border-accentgld/20 p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight ia-formatada text-base shadow-lg mt-2 ocultavel ${classeBlur}">
-                        ${respostaFormatada}
+                    <div class="flex justify-start w-full mt-2">
+                        <div class="p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight ia-formatada text-base shadow-lg ocultavel ${classeBlur}" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                            ${respostaFormatada}
+                        </div>
                     </div>`;
             } catch (e) {
-                document.getElementById('digitando').remove();
+                if(document.getElementById('digitando')) document.getElementById('digitando').remove();
                 chatBox.innerHTML += `<div class="text-red-500 text-xs mt-2">Erro ao conectar com a IA.</div>`;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -441,6 +550,102 @@
         document.getElementById("pergunta").addEventListener("keypress", function(event) {
             if (event.key === "Enter") { event.preventDefault(); perguntarIA(); }
         });
+
+        function abrirModalFeedback() {
+            document.getElementById('modalFeedback').classList.remove('hidden');
+        }
+
+        function fecharModalFeedback() {
+            document.getElementById('modalFeedback').classList.add('hidden');
+
+            document.getElementById('feedNome').value = '';
+            document.getElementById('feedBanco').value = '';
+            document.getElementById('feedAvisar').checked = false;
+            document.getElementById('feedContato').value = '';
+            toggleContato();
+        }
+
+        function toggleContato() {
+            const divContato = document.getElementById('divContato');
+            if(document.getElementById('feedAvisar').checked) {
+                divContato.classList.remove('hidden');
+            } else {
+                divContato.classList.add('hidden');
+            }
+        }
+
+        function abrirModalFeedback() {
+            document.getElementById('modalFeedback').classList.remove('hidden');
+            
+            document.getElementById('formFeedbackContent').classList.remove('hidden');
+            document.getElementById('msgSucessoFeedback').classList.remove('flex');
+            document.getElementById('msgSucessoFeedback').classList.add('hidden');
+        }
+
+        function fecharModalFeedback() {
+            document.getElementById('modalFeedback').classList.add('hidden');
+
+            document.getElementById('feedNome').value = '';
+            document.getElementById('feedBanco').value = '';
+            document.getElementById('feedAvisar').checked = false;
+            document.getElementById('feedContato').value = '';
+
+            document.getElementById('feedBanco').classList.remove('border-red-500');
+            toggleContato();
+        }
+
+        function toggleContato() {
+            const divContato = document.getElementById('divContato');
+            if(document.getElementById('feedAvisar').checked) {
+                divContato.classList.remove('hidden');
+            } else {
+                divContato.classList.add('hidden');
+            }
+        }
+
+        async function enviarFeedback() {
+            const inputBanco = document.getElementById('feedBanco');
+            const banco = inputBanco.value;
+            
+            if(!banco) {
+                inputBanco.classList.add('border-red-500');
+                inputBanco.focus();
+                
+                setTimeout(() => inputBanco.classList.remove('border-red-500'), 2000);
+                return;
+            }
+
+            const dados = {
+                nome: document.getElementById('feedNome').value,
+                banco: banco,
+                contato: document.getElementById('feedAvisar').checked ? document.getElementById('feedContato').value : 'Não quis ser avisado'
+            };
+
+            const btn = document.getElementById('btnEnviarFeedback');
+            const textoOriginal = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Enviando...`;
+            btn.disabled = true;
+
+            try {
+                await fetch('/sugerir_banco', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                document.getElementById('formFeedbackContent').classList.add('hidden');
+                document.getElementById('msgSucessoFeedback').classList.remove('hidden');
+                document.getElementById('msgSucessoFeedback').classList.add('flex');
+                lucide.createIcons();
+            } catch (e) {
+                btn.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4"></i> Erro! Tente de novo.`;
+                setTimeout(() => { btn.innerHTML = textoOriginal; }, 3000);
+            } finally {
+                setTimeout(() => {
+                    btn.innerHTML = textoOriginal;
+                    btn.disabled = false;
+                }, 500);
+            }
+        }
     </script>
 </body>
 </html>
