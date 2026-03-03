@@ -43,7 +43,7 @@ def gerar_conteudo_com_rodizio(prompt):
     for chave in chaves_validas:
         try:
             url = url_base + chave
-            resposta = requests.post(url, json=payload, timeout=40)
+            resposta = requests.post(url, json=payload, timeout=160)
             
             if resposta.status_code == 200:
                 dados = resposta.json()
