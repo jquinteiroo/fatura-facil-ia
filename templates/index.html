@@ -10,18 +10,18 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23F26A4B%22>S</text></svg>">
-    
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22%23ff6b35%22>FF</text></svg>">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'bgdark': 'var(--color-bg)',     
-                        'textlight': 'var(--color-text)',  
-                        'accentorg': 'var(--color-org)',  
-                        'accentgrn': 'var(--color-grn)',  
-                        'accentgld': 'var(--color-gld)'   
+                        'bgdark': 'var(--color-bg)',
+                        'textlight': 'var(--color-text)',
+                        'accentorg': 'var(--color-org)',
+                        'accentgrn': 'var(--color-grn)',
+                        'accentgld': 'var(--color-gld)'
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
@@ -94,7 +94,13 @@
 <body class="min-h-screen flex flex-col relative overflow-x-hidden m-0 p-0 bg-bgdark text-textlight">
 
     <div class="absolute top-4 right-4 md:top-8 md:right-8 animate-in z-50 flex items-center gap-2">
-        
+        <div class="absolute top-4 right-4 md:top-8 md:right-8 animate-in z-50 flex items-center gap-2">
+        <button onclick="abrirModalFAQ()" target="_blank"
+            class="text-accentgld hover:text-textlight transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center"
+            title="Dúvidas Frequentes">
+            <i i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
+            <span class="text-sm font-medium hidden md:inline"></span>
+        </button>
         <a href="https://github.com/jquinteiroo/fatura-facil-ia" target="_blank" class="text-accentgld hover:text-textlight transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center" title="Código Aberto no GitHub">
             <i data-lucide="github" class="w-5 h-5 md:w-6 md:h-6"></i>
         </a>
@@ -111,7 +117,7 @@
         
         <div class="flex-1 space-y-8">
             <div class="text-center space-y-2 pt-4 relative animate-in">
-            <a href="http://127.0.0.1:5000/" class="inline-block hover:scale-105 transition-transform duration-300">
+            <a href="https://fatura-facil.online/" class="inline-block hover:scale-105 transition-transform duration-300">
                 <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Fatura <span class="text-accentorg">Facil</span> IA</h1>
             </a>
             <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
@@ -288,6 +294,107 @@
             
         </div>
     </footer>
+    <div id="modalFAQ"
+        class="hidden fixed inset-0 z-[9999] items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div
+            class="bg-white dark:bg-bgdark border border-slate-200 dark:border-white/10 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+
+            <div
+                class="p-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-slate-50 dark:bg-white/5">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <i data-lucide="help-circle" class="text-accentorg"></i> Perguntas Frequentes
+                </h3>
+                <button onclick="fecharModalFAQ()"
+                    class="text-slate-400 hover:text-slate-600 dark:text-white/50 dark:hover:text-white transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="p-6 max-h-[70vh] overflow-y-auto space-y-4 custom-scrollbar">
+
+                <details name="faq"
+                    class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                    <summary
+                        class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                        O Fatura Fácil armazena meus dados?
+                        <i data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                    </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        Não. O processamento é feito de forma temporária para gerar os gráficos. Seus dados de fatura
+                        não são salvos em nenhum banco de dados permanente.
+                    </p>
+                </details>
+
+                <details name="faq"
+                    class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                    <summary
+                        class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                        Quais bancos são suportados?
+                        <i data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                    </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        Atualmente suportamos Nubank, Inter, Mercado Pago e Sicredi. Você pode sugerir novos bancos no
+                        botão "Sugerir Banco".
+                    </p>
+                </details>
+
+                <details name="faq"
+                    class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                    <summary
+                        class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                        Quais os formatos de arquivo devo enviar?
+                        <i data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                    </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        Pode carregar a sua fatura em formato <strong>PDF</strong> (original do banco) ou
+                        <strong>CSV</strong>. Recomendamos o PDF para uma extração de dados mais precisa.
+                    </p>
+                </details>
+
+                <details name="faq"
+                    class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                    <summary
+                        class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                        O serviço é gratuito?
+                        <i data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                    </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        Sim! O Fatura Fácil é uma ferramenta open-source e gratuita para ajudar na organização
+                        financeira pessoal.
+                    </p>
+                </details>
+
+                <details name="faq"
+                    class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                    <summary
+                        class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                        A minha fatura não foi lida corretamente, o que fazer?
+                        <i data-lucide="chevron-down"
+                            class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                    </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        Certifique-se de que o ficheiro não está protegido por palavra-passe e que o banco é um dos
+                        suportados. Se o erro persistir, use o botão "Sugerir Banco" para nos enviar um exemplo
+                        (ocultando dados sensíveis).
+                    </p>
+                </details>
+                <details name="faq" class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
+                <summary class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
+                    A IA tem acesso aos meus dados bancários?
+                    <i data-lucide="chevron-down" class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
+                </summary>
+                    <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
+                        A IA processa apenas as descrições e valores das transações que o utilizador carrega para fornecer as análises. Não existe qualquer ligação direta com a sua conta bancária real.
+                    </p>
+                </details>
+                   
+            </div>
+        </div>
+    </div>
     <div id="modalFeedback" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
         <div class="glass-card p-6 w-11/12 max-w-sm animate-in zoom-in-95 duration-200 shadow-2xl">
             
@@ -644,6 +751,26 @@
                     btn.innerHTML = textoOriginal;
                     btn.disabled = false;
                 }, 500);
+            }
+        }
+        function abrirModalFAQ() {
+            const modal = document.getElementById('modalFAQ');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex'); // Garante que o layout flexível apareça
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            } else {
+                console.error("Erro: Modal FAQ não encontrado no HTML!");
+            }
+        }
+
+        function fecharModalFAQ() {
+            const modal = document.getElementById('modalFAQ');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         }
     </script>
