@@ -100,7 +100,7 @@
         <button onclick="abrirModalFAQ()" target="_blank"
             class="text-accentgld hover:text-textlight transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center"
             title="Dúvidas Frequentes">
-            <i i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
+            <i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
             <span class="text-sm font-medium hidden md:inline"></span>
         </button>
         <a href="https://github.com/jquinteiroo/fatura-facil-ia" target="_blank"
@@ -126,7 +126,7 @@
                     <a href="/"
                         class="inline-block hover:scale-105 transition-transform duration-300">
                         <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Fatura <span
-                                class="text-accentorg">Fácil</span> IA</h1>
+                                class="text-accentorg">Fácil</span></h1>
                     </a>
                     <p class="text-accentgld">Entenda sua fatura. Sem cadastro. Sem depender de IA.</p>
                 </div>
@@ -415,7 +415,7 @@
     </div>
     </div>
     <footer class="w-full mt-auto py-5 animate-in delay-3" style="border-top: 1px solid #A58955;">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center x-4 md:px-8 gap-3">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center px-4 md:px-8 gap-3">
 
             <div class="text-left text-center">
                 <p class="text-[10px] text-textlight/50 font-medium tracking-wide">
@@ -1078,29 +1078,6 @@
         document.getElementById("pergunta").addEventListener("keypress", function(event) {
             if (event.key === "Enter") { event.preventDefault(); perguntarFatura(); }
         });
-
-        function abrirModalFeedback() {
-            document.getElementById('modalFeedback').classList.remove('hidden');
-        }
-
-        function fecharModalFeedback() {
-            document.getElementById('modalFeedback').classList.add('hidden');
-
-            document.getElementById('feedNome').value = '';
-            document.getElementById('feedBanco').value = '';
-            document.getElementById('feedAvisar').checked = false;
-            document.getElementById('feedContato').value = '';
-            toggleContato();
-        }
-
-        function toggleContato() {
-            const divContato = document.getElementById('divContato');
-            if(document.getElementById('feedAvisar').checked) {
-                divContato.classList.remove('hidden');
-            } else {
-                divContato.classList.add('hidden');
-            }
-        }
 
         function abrirModalFeedback() {
             document.getElementById('modalFeedback').classList.remove('hidden');
