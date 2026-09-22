@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:image" content="C:\Users\jquinteiro\Documents\GitHub\WIS-homolog\faturafacil (1).jpg" />
-    <meta property="og:title" content="Fatura Fácil IA" />
-    <meta property="og:description" content="Inteligência financeira para gestão do seu cartão, esteja no controle das suas finanças." />
-    <title>Fatura Fácil IA</title>
+    <meta property="og:title" content="Fatura Fácil" />
+    <meta property="og:description" content="Entenda seus gastos com uma análise privada, simples e sem depender de IA." />
+    <title>Fatura Fácil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>\n    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <link rel="icon"
@@ -123,12 +123,12 @@
 
             <div class="flex-1 space-y-8">
                 <div class="text-center space-y-2 pt-4 relative animate-in">
-                    <a href="http://127.0.0.1:5000/"
+                    <a href="/"
                         class="inline-block hover:scale-105 transition-transform duration-300">
                         <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Fatura <span
                                 class="text-accentorg">Fácil</span> IA</h1>
                     </a>
-                    <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
+                    <p class="text-accentgld">Entenda sua fatura. Sem cadastro. Sem depender de IA.</p>
                 </div>
 
                 <div id="uploadArea"
@@ -141,7 +141,7 @@
 
                     <div class="mt-4 flex items-center justify-center gap-2 text-accentgld/60 text-[11px]">
                         <i data-lucide="shield-check" class="w-4 h-4 text-accentgrn"></i>
-                        <span>Processamento seguro: Seus dados não são armazenados.</span>
+                        <span>Sua fatura não é enviada a modelos de IA.</span>
                     </div>
                 </div>
 
@@ -149,7 +149,7 @@
                     <div class="space-y-2">
                         <div class="text-accentorg flex justify-center"><i data-lucide="scan-line" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="font-bold text-sm text-textlight">Leitura Inteligente</h4>
+                        <h4 class="font-bold text-sm text-textlight">Leitura automática</h4>
                         <p class="text-xs text-accentgld/70 leading-relaxed">Extraímos automaticamente os dados de
                             faturas PDF ou CSV.</p>
                     </div>
@@ -163,7 +163,7 @@
                     <div class="space-y-2">
                         <div class="text-accentorg flex justify-center"><i data-lucide="messages-square"
                                 class="w-6 h-6"></i></div>
-                        <h4 class="font-bold text-sm text-textlight">Consultoria via IA</h4>
+                        <h4 class="font-bold text-sm text-textlight">Pergunte sobre sua fatura</h4>
                         <p class="text-xs text-accentgld/70 leading-relaxed">Tire dúvidas sobre seus hábitos financeiros
                             com nosso chat.</p>
                     </div>
@@ -290,7 +290,7 @@
                         <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-white"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
+                            <h3 class="font-bold text-textlight">Assistente da Fatura</h3>
                             <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
                         </div>
                     </div>
@@ -325,10 +325,10 @@
 
             <div class="text-left text-center">
                 <p class="text-[10px] text-textlight/50 font-medium tracking-wide">
-                    <span class="font-bold text-textlight/70">Fatura Fácil IA</span>
+                    <span class="font-bold text-textlight/70">Fatura Fácil</span>
                 </p>
                 <p class="text-[9px] text-textlight/40 font-mono mt-0.5">
-                    &copy; 2026-2026
+                    &copy; 2026
                 </p>
             </div>
 
@@ -533,7 +533,7 @@
         inicializarTema(); 
         lucide.createIcons();
         
-        let contextoFatura = ""; 
+        let transacoesFatura = []; 
         let resumoMatematico = ""; 
         let meuGrafico = null; 
         let privacidadeAtiva = false;
@@ -585,14 +585,14 @@
                 if (data.sucesso) {
                     if(data.tipo === 'csv' || data.tipo === 'pdf_estruturado') {
                         document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                        contextoFatura = JSON.stringify(data.dados); 
+                        transacoesFatura = data.dados; 
                         gerarVisuais(data.dados);
                         mudarAba('dash');
                     } else if (data.tipo === 'pdf') {
                         document.getElementById('valorTotal').innerText = "Analisado!";
                         document.getElementById('containerGrafico').innerHTML = "<p class='text-center text-accentgld mt-10'>Gráficos detalhados otimizados apenas para CSV.</p>";
                         document.getElementById('tabelaGastos').innerHTML = "<tr><td colspan='2' class='py-4 text-center text-accentgld'>Fatura lida. Acesse o chat ao lado!</td></tr>";
-                        contextoFatura = data.texto_extraido;
+                        transacoesFatura = [];
                         resumoMatematico = "Fatura em texto bruto. Extraia os valores da conversa.";
                         mudarAba('chat');
                     }
@@ -668,6 +668,12 @@
             });
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         async function perguntarIA() {
             const input = document.getElementById('pergunta');
             const chatBox = document.getElementById('chatBox');
@@ -686,18 +692,18 @@
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            chatBox.innerHTML += `<div id="digitando" class="text-accentgld text-xs ml-2 animate-pulse mt-2">O Consultor está digitando...</div>`;
+            chatBox.innerHTML += `<div id="digitando" class="text-accentgld text-xs ml-2 animate-pulse mt-2">Analisando a fatura...</div>`;
 
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ pergunta: pergunta, contexto: contextoFatura, resumo: resumoMatematico })
+                    body: JSON.stringify({ pergunta: pergunta, transacoes: transacoesFatura })
                 });
                 const data = await response.json();
                 
                 document.getElementById('digitando').remove();
-                const respostaFormatada = marked.parse(data.resposta);
+                const respostaFormatada = DOMPurify.sanitize(marked.parse(data.resposta));
 
                 chatBox.innerHTML += `
                     <div class="flex justify-start w-full mt-2">

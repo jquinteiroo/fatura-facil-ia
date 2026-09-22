@@ -1,7 +1,4 @@
 Flask
 pandas
-google-generativeai
 PyPDF2
 gunicorn
-requests
-
