@@ -1,42 +1,137 @@
-# 🚀 Fatura Facil IA
+# Fatura Fácil
 
-> **Inteligência financeira ao seu alcance.** Transforme faturas complexas de cartão de crédito em insights claros e converse com uma IA especializada sobre os seus gastos.
+> Entenda sua fatura de cartão sem cadastro, sem conectar sua conta bancária e sem depender de API de IA.
 
-O **Fatura Facil IA** é uma aplicação web Open Source desenvolvida para devolver o controle financeiro aos usuários. Através da leitura inteligente de faturas (PDF ou CSV) e integração com Inteligência Artificial, o sistema categoriza gastos, gera gráficos visuais e oferece um consultor financeiro interativo em formato de chat.
+O **Fatura Fácil** é uma aplicação web open source para transformar faturas PDF ou CSV em uma visão simples dos gastos. A versão 2 está sendo reconstruída com um motor determinístico: extração, categorização, cálculos, perguntas e comparação de faturas funcionam sem Gemini, OpenAI, Claude ou outro LLM.
 
----
+## O que a V2 já faz
 
-## ✨ Funcionalidades Principais
+- leitura local de PDF e CSV;
+- parsers modulares para Nubank, Banco Inter, Mercado Pago e Sicredi;
+- fallback genérico para outros layouts;
+- categorização automática por regras;
+- dashboard com total, categorias, média e principais despesas;
+- destaques calculados sem IA;
+- perguntas objetivas sobre a fatura;
+- revisão manual de descrição, categoria e valor;
+- remoção de lançamentos incorretos;
+- exportação da fatura revisada para CSV;
+- comparação entre duas faturas;
+- modo de privacidade visual;
+- limite de upload e validação básica do arquivo;
+- testes automatizados com GitHub Actions.
 
-* 📄 **Leitura Inteligente:** Extração automática de dados de faturas em formatos PDF ou CSV.
-* 📊 **Dashboard Visual:** Gráficos interativos para visualizar exatamente para onde o seu dinheiro está indo.
-* 🤖 **Consultor Financeiro via IA:** Um chat integrado que analisa sua fatura e responde perguntas específicas sobre seus hábitos de consumo.
-* 🌓 **Modo Claro / Escuro:** Interface moderna e adaptável utilizando o conceito de *Glassmorphism*.
-* 🏦 **Sugestão de Bancos:** Sistema integrado para que os usuários solicitem suporte a novos bancos, salvando as sugestões em planilhas locais.
-* 🔒 **Foco em Privacidade:** Processamento rápido com opção de ofuscar dados sensíveis na tela.
+## Privacidade
 
----
+O Fatura Fácil **não envia o conteúdo da fatura para modelos de IA**.
 
-## 🏦 Bancos Testados e Otimizados
+O arquivo é recebido pelo servidor Flask para extração e processamento durante a requisição. A aplicação não possui banco de dados para armazenar faturas. Antes de disponibilizar uma instância pública, revise a política de privacidade e a infraestrutura de hospedagem escolhida.
 
-Atualmente, a extração de dados funciona perfeitamente com faturas dos seguintes bancos:
-* Nubank
-* Mercado Pago
-* Banco Inter
-* Sicredi
+## Bancos
 
----
+Existem parsers dedicados para:
 
-## 🛠️ Tecnologias Utilizadas
+- Nubank
+- Banco Inter
+- Mercado Pago
+- Sicredi
 
-**Frontend:**
-* HTML5 / CSS3 / JavaScript (Vanilla)
-* [Tailwind CSS](https://tailwindcss.com/) (Estilização utilitária e responsividade)
-* [Lucide Icons](https://lucide.dev/) (Ícones modernos)
+> Os parsers ainda estão em validação. Layouts de faturas mudam e podem variar entre produtos do mesmo banco. Sempre confira a área **Revise as transações** antes de considerar o resultado final.
 
-**Backend:**
-* [Python 3](https://www.python.org/)
-* [Flask](https://flask.palletsprojects.com/) (Microframework para rotas e processamento)
-* Integração com API de IA (LLM para o chat consultivo)
+## Testar a branch V2
 
----
+### 1. Clonar
+
+```bash
+git clone -b feat/v2-autonomous-foundation --single-branch https://github.com/jquinteiroo/fatura-facil-ia.git
+cd fatura-facil-ia
+```
+
+### 2. Criar ambiente virtual
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Linux/macOS:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Instalar dependências
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+### 4. Rodar testes
+
+```bash
+pytest -q
+```
+
+### 5. Iniciar o app
+
+```bash
+python app.py
+```
+
+Abra:
+
+```text
+http://127.0.0.1:5000
+```
+
+## Faturas de exemplo
+
+A pasta `examples/` contém duas faturas CSV fictícias que podem ser usadas para testar o dashboard e a comparação sem expor dados financeiros reais:
+
+- `examples/fatura_setembro.csv`
+- `examples/fatura_agosto.csv`
+
+Carregue setembro como fatura principal e depois use **Comparar fatura** para selecionar agosto.
+
+## Tecnologias
+
+### Backend
+- Python
+- Flask
+- pandas
+- PyPDF2
+- Gunicorn
+
+### Frontend
+- HTML
+- Tailwind CSS
+- JavaScript
+- Chart.js
+- Lucide
+- DOMPurify
+
+## Testes
+
+Os testes cobrem:
+
+- parsing de valores;
+- detecção de banco;
+- categorização;
+- layouts representativos dos quatro bancos;
+- consultas sobre a fatura;
+- comparação entre faturas.
+
+O workflow em `.github/workflows/tests.yml` executa `pytest` automaticamente em pushes e pull requests.
+
+## Estado da V2
+
+A V2 está na branch:
+
+```text
+feat/v2-autonomous-foundation
+```
+
+O desenvolvimento está sendo mantido fora da `main` até a validação manual com faturas reais anonimizadas.

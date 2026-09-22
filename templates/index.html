@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:image" content="C:\Users\jquinteiro\Documents\GitHub\WIS-homolog\faturafacil (1).jpg" />
-    <meta property="og:title" content="Fatura Fácil IA" />
-    <meta property="og:description" content="Inteligência financeira para gestão do seu cartão, esteja no controle das suas finanças." />
-    <title>Fatura Fácil IA</title>
+    <meta property="og:title" content="Fatura Fácil" />
+    <meta property="og:description" content="Entenda seus gastos com uma análise privada, simples e sem depender de IA." />
+    <title>Fatura Fácil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <link rel="icon"
@@ -74,11 +74,11 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--color-gld); border-radius: 10px; }
 
-        .ia-formatada p { margin-bottom: 0.75rem; line-height: 1.6; }
-        .ia-formatada strong { font-weight: 800; color: var(--color-org); }
-        .ia-formatada ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .ia-formatada ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .ia-formatada li { margin-bottom: 0.25rem; }
+        .resposta-formatada p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .resposta-formatada strong { font-weight: 800; color: var(--color-org); }
+        .resposta-formatada ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .resposta-formatada ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .resposta-formatada li { margin-bottom: 0.25rem; }
 
         .privacidade-blur { filter: blur(12px); opacity: 0.5; user-select: none; pointer-events: none; transition: all 0.3s ease; }
         .ocultavel { transition: all 0.3s ease; }
@@ -100,7 +100,7 @@
         <button onclick="abrirModalFAQ()" target="_blank"
             class="text-accentgld hover:text-textlight transition-colors p-3 rounded-full hover:bg-accentgld/10 glass-card border-none flex items-center justify-center"
             title="Dúvidas Frequentes">
-            <i i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
+            <i data-lucide="help-circle" class="w-5 h-5 md:w-6 md:h-6"></i>
             <span class="text-sm font-medium hidden md:inline"></span>
         </button>
         <a href="https://github.com/jquinteiroo/fatura-facil-ia" target="_blank"
@@ -123,12 +123,12 @@
 
             <div class="flex-1 space-y-8">
                 <div class="text-center space-y-2 pt-4 relative animate-in">
-                    <a href="http://127.0.0.1:5000/"
+                    <a href="/"
                         class="inline-block hover:scale-105 transition-transform duration-300">
                         <h1 class="text-4xl md:text-5xl font-extrabold text-textlight">Fatura <span
-                                class="text-accentorg">Fácil</span> IA</h1>
+                                class="text-accentorg">Fácil</span></h1>
                     </a>
-                    <p class="text-accentgld">Inteligência financeira ao seu alcance</p>
+                    <p class="text-accentgld">Entenda sua fatura. Sem cadastro. Sem depender de IA.</p>
                 </div>
 
                 <div id="uploadArea"
@@ -141,7 +141,7 @@
 
                     <div class="mt-4 flex items-center justify-center gap-2 text-accentgld/60 text-[11px]">
                         <i data-lucide="shield-check" class="w-4 h-4 text-accentgrn"></i>
-                        <span>Processamento seguro: Seus dados não são armazenados.</span>
+                        <span>Sua fatura não é enviada a modelos de IA.</span>
                     </div>
                 </div>
 
@@ -149,7 +149,7 @@
                     <div class="space-y-2">
                         <div class="text-accentorg flex justify-center"><i data-lucide="scan-line" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="font-bold text-sm text-textlight">Leitura Inteligente</h4>
+                        <h4 class="font-bold text-sm text-textlight">Leitura automática</h4>
                         <p class="text-xs text-accentgld/70 leading-relaxed">Extraímos automaticamente os dados de
                             faturas PDF ou CSV.</p>
                     </div>
@@ -163,7 +163,7 @@
                     <div class="space-y-2">
                         <div class="text-accentorg flex justify-center"><i data-lucide="messages-square"
                                 class="w-6 h-6"></i></div>
-                        <h4 class="font-bold text-sm text-textlight">Consultoria via IA</h4>
+                        <h4 class="font-bold text-sm text-textlight">Pergunte sobre sua fatura</h4>
                         <p class="text-xs text-accentgld/70 leading-relaxed">Tire dúvidas sobre seus hábitos financeiros
                             com nosso chat.</p>
                     </div>
@@ -171,7 +171,7 @@
                 <div class="mt-12 text-center animate-in delay-3">
                     <div id="bancosCompativeis" class="mt-12 text-center animate-in delay-3">
                         <p class="text-[10px] text-accentgld/50 uppercase tracking-widest mb-4 font-semibold">
-                            Faturas testadas e otimizadas
+                            Parsers em validação
                         </p>
                         <div class="flex flex-wrap justify-center gap-4">
 
@@ -222,9 +222,8 @@
                 <nav class="flex justify-between items-center pb-2">
                     <div class="flex gap-2 md:gap-8">
                         <button onclick="mudarAba('dash')" id="btnDash"
-                            class="tab-btn tab-active text-sm md:text-base">📊 Dashboard</button>
-                        <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">🤖 Chat com
-                            a IA</button>
+                            class="tab-btn tab-active text-sm md:text-base">📊 Resumo</button>
+                        <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">💬 Pergunte à fatura</button>
                     </div>
 
                     <div class="flex items-center gap-2 md:gap-4">
@@ -243,17 +242,102 @@
                 </nav>
 
                 <div id="abaDash" class="space-y-6 animate-in fade-in duration-500">
-                    <div
-                        class="glass-card p-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
-                        <div>
-                            <p class="text-accentgld uppercase tracking-widest text-sm font-bold">Total Gasto</p>
-                            <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00
-                            </h2>
+                    <div class="glass-card p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                    <span id="badgeBanco" class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border border-accentgld/30 text-accentgld">Fatura</span>
+                                    <span class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-accentgrn/15 text-accentgrn border border-accentgrn/20">Processamento local</span>
+                                </div>
+                                <p class="text-accentgld uppercase tracking-widest text-xs font-bold">Total identificado</p>
+                                <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00</h2>
+                                <p id="statusAnalise" class="text-xs text-accentgld/70 mt-2">Analisando transações...</p>
+                            </div>
+                            <p class="text-xs text-accentgld/60 max-w-sm md:text-right">
+                                Nenhuma informação da fatura é enviada a um modelo de IA.
+                            </p>
                         </div>
-                        <div
-                            class="bg-accentgrn text-bgdark px-4 py-2 rounded-lg font-bold shadow-lg shadow-accentgrn/20">
-                            Análise Concluída
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Transações</p>
+                            <p id="metricTransacoes" class="text-2xl font-black text-textlight mt-1">0</p>
                         </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Maior categoria</p>
+                            <p id="metricCategoria" class="text-lg font-black text-textlight mt-1 truncate">—</p>
+                        </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Média por compra</p>
+                            <p id="metricMedia" class="text-xl font-black text-textlight mt-1 ocultavel">R$ 0,00</p>
+                        </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Categorização</p>
+                            <p id="metricCobertura" class="text-xl font-black text-accentgrn mt-1">0%</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 md:p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-accentorg"></i>
+                            <h3 class="font-bold text-textlight">Destaques da fatura</h3>
+                        </div>
+                        <div id="insightsLista" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm"></div>
+                    </div>
+
+                    <div class="glass-card p-5 md:p-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="list-checks" class="w-5 h-5 text-accentorg"></i>
+                                    <h3 class="font-bold text-textlight">Revise as transações</h3>
+                                </div>
+                                <p id="resumoRevisao" class="text-xs text-accentgld/70 mt-1">Confira os itens extraídos antes de usar a análise.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="togglePainelRevisao()" class="px-3 py-2 rounded-xl border border-accentgld/20 text-xs font-bold hover:border-accentorg hover:text-accentorg transition-colors">Revisar lançamentos</button>
+                                <button onclick="exportarCSV()" class="px-3 py-2 rounded-xl border border-accentgld/20 text-xs font-bold hover:border-accentorg hover:text-accentorg transition-colors">Exportar CSV</button>
+                                <button onclick="document.getElementById('comparacaoInput').click()" class="px-3 py-2 rounded-xl bg-accentorg text-white text-xs font-bold hover:opacity-90 transition-opacity">Comparar fatura</button>
+                                <input type="file" id="comparacaoInput" class="hidden" accept=".csv,.pdf" onchange="carregarComparacao()">
+                            </div>
+                        </div>
+                        <div id="painelRevisao" class="hidden mt-5 border-t border-accentgld/10 pt-5">
+                            <div class="flex items-center justify-between mb-3 gap-3">
+                                <p class="text-xs text-accentgld/70">Alterações ficam apenas nesta sessão e recalculam o dashboard.</p>
+                                <span id="contadorRevisao" class="text-[10px] uppercase tracking-widest text-accentorg font-bold whitespace-nowrap"></span>
+                            </div>
+                            <div id="listaRevisao" class="space-y-2 max-h-[520px] overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+
+                    <div id="painelComparacao" class="hidden glass-card p-5 md:p-6">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-5">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="git-compare-arrows" class="w-5 h-5 text-accentorg"></i>
+                                    <h3 class="font-bold text-textlight">Comparação de faturas</h3>
+                                </div>
+                                <p id="comparacaoSubtitulo" class="text-xs text-accentgld/70 mt-1">Comparação calculada localmente.</p>
+                            </div>
+                            <button onclick="fecharComparacao()" class="text-accentgld hover:text-accentorg p-2" title="Fechar comparação"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+                            <div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">
+                                <p class="text-[10px] uppercase tracking-widest text-accentgld/60 font-bold">Fatura atual</p>
+                                <p id="comparacaoAtual" class="text-xl font-black text-textlight mt-1 ocultavel">R$ 0,00</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">
+                                <p class="text-[10px] uppercase tracking-widest text-accentgld/60 font-bold">Outra fatura</p>
+                                <p id="comparacaoAnterior" class="text-xl font-black text-textlight mt-1 ocultavel">R$ 0,00</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">
+                                <p class="text-[10px] uppercase tracking-widest text-accentgld/60 font-bold">Diferença</p>
+                                <p id="comparacaoDiferenca" class="text-xl font-black mt-1 ocultavel">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div id="comparacaoInsights" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5"></div>
+                        <div id="comparacaoCategorias" class="space-y-2"></div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -290,15 +374,25 @@
                         <div class="bg-accentorg p-2 rounded-full"><i data-lucide="bot" class="w-5 h-5 text-white"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-textlight">Consultor Financeiro</h3>
+                            <h3 class="font-bold text-textlight">Assistente da Fatura</h3>
                             <p class="text-xs text-accentgld">Tire dúvidas sobre seus gastos</p>
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        <p class="text-[10px] uppercase tracking-widest text-accentgld/60 font-bold mb-2">Perguntas rápidas</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="usarPergunta('Onde gastei mais?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Onde gastei mais?</button>
+                            <button onclick="usarPergunta('Quais foram minhas 5 maiores compras?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">5 maiores compras</button>
+                            <button onclick="usarPergunta('Quanto gastei com assinaturas?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Assinaturas</button>
+                            <button onclick="usarPergunta('Qual foi minha maior compra?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Maior compra</button>
+                        </div>
+                    </div>
+
                     <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
-                        <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel"
+                        <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight resposta-formatada ocultavel"
                             style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
-                            Olá! Fatura analisada com sucesso. O que você gostaria de saber?
+                            Sua fatura foi estruturada localmente. Posso consultar e calcular os dados sem usar uma IA externa.
                         </div>
                     </div>
 
@@ -306,7 +400,7 @@
                         style="border: 1px solid var(--glass-border);">
                         <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?"
                             class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
-                        <button onclick="perguntarIA()"
+                        <button onclick="perguntarFatura()"
                             class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-white shadow-lg">
                             <i data-lucide="send" class="w-6 h-6"></i>
                         </button>
@@ -321,14 +415,14 @@
     </div>
     </div>
     <footer class="w-full mt-auto py-5 animate-in delay-3" style="border-top: 1px solid #A58955;">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center x-4 md:px-8 gap-3">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center px-4 md:px-8 gap-3">
 
             <div class="text-left text-center">
                 <p class="text-[10px] text-textlight/50 font-medium tracking-wide">
-                    <span class="font-bold text-textlight/70">Fatura Fácil IA</span>
+                    <span class="font-bold text-textlight/70">Fatura Fácil</span>
                 </p>
                 <p class="text-[9px] text-textlight/40 font-mono mt-0.5">
-                    &copy; 2026-2026
+                    &copy; 2026
                 </p>
             </div>
 
@@ -424,11 +518,11 @@
                 </details>
                 <details name="faq" class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
                 <summary class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
-                    A IA tem acesso aos meus dados bancários?
+                    O Fatura Fácil envia minha fatura para alguma IA?
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
                 </summary>
                     <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
-                        A IA processa apenas as descrições e valores das transações que o utilizador carrega para fornecer as análises. Não existe qualquer ligação direta com a sua conta bancária real.
+                        Não. A versão atual usa parsers e regras locais no servidor para estruturar e analisar a fatura. Nenhum conteúdo é enviado a Gemini, OpenAI, Claude ou outro modelo de IA.
                     </p>
                 </details>
                    
@@ -533,9 +627,12 @@
         inicializarTema(); 
         lucide.createIcons();
         
-        let contextoFatura = ""; 
-        let resumoMatematico = ""; 
-        let meuGrafico = null; 
+        let transacoesFatura = [];
+        let analiseFatura = null;
+        let bancoFatura = 'fatura';
+        let transacoesComparacao = [];
+        let nomeArquivoComparacao = '';
+                let meuGrafico = null; 
         let privacidadeAtiva = false;
 
         function togglePrivacidade() {
@@ -585,16 +682,11 @@
                 if (data.sucesso) {
                     if(data.tipo === 'csv' || data.tipo === 'pdf_estruturado') {
                         document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                        contextoFatura = JSON.stringify(data.dados); 
-                        gerarVisuais(data.dados);
+                        transacoesFatura = data.dados;
+                        analiseFatura = data.analise || null;
+                        bancoFatura = data.banco || (data.tipo === 'csv' ? 'csv' : 'fatura');
+                        gerarVisuais(data.dados, analiseFatura, bancoFatura);
                         mudarAba('dash');
-                    } else if (data.tipo === 'pdf') {
-                        document.getElementById('valorTotal').innerText = "Analisado!";
-                        document.getElementById('containerGrafico').innerHTML = "<p class='text-center text-accentgld mt-10'>Gráficos detalhados otimizados apenas para CSV.</p>";
-                        document.getElementById('tabelaGastos').innerHTML = "<tr><td colspan='2' class='py-4 text-center text-accentgld'>Fatura lida. Acesse o chat ao lado!</td></tr>";
-                        contextoFatura = data.texto_extraido;
-                        resumoMatematico = "Fatura em texto bruto. Extraia os valores da conversa.";
-                        mudarAba('chat');
                     }
                 } else {
                     alert('Erro: ' + data.erro);
@@ -606,7 +698,215 @@
             }
         }
 
-        function gerarVisuais(dadosCSV) {
+        function formatarMoeda(valor) {
+            return 'R$ ' + Number(valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function nomeBanco(valor) {
+            const nomes = {nubank: 'Nubank', inter: 'Inter', mercado_pago: 'Mercado Pago', sicredi: 'Sicredi', csv: 'CSV'};
+            return nomes[valor] || 'Formato genérico';
+        }
+
+        function usarPergunta(texto) {
+            document.getElementById('pergunta').value = texto;
+            perguntarFatura();
+        }
+
+        const CATEGORIAS_VALIDAS = ['Alimentação', 'Mercado', 'Transporte', 'Moradia', 'Saúde', 'Educação', 'Lazer', 'Compras', 'Assinaturas', 'Viagens', 'Serviços', 'Outros'];
+
+        function construirAnaliseAtual(dados) {
+            const positivos = dados.filter(item => (parseFloat(item.Valor) || 0) > 0);
+            const categorizados = positivos.filter(item => (item.Categoria || 'Outros') !== 'Outros').length;
+            const cobertura = positivos.length ? (categorizados / positivos.length) * 100 : 0;
+            return {
+                transactions_count: positivos.length,
+                categorized_count: categorizados,
+                uncategorized_count: positivos.length - categorizados,
+                category_coverage: Number(cobertura.toFixed(1)),
+                status: bancoFatura === 'fatura' || cobertura < 60 ? 'revisar' : 'ok'
+            };
+        }
+
+        function togglePainelRevisao() {
+            const painel = document.getElementById('painelRevisao');
+            painel.classList.toggle('hidden');
+            if (!painel.classList.contains('hidden')) renderizarRevisao();
+        }
+
+        function renderizarRevisao() {
+            const lista = document.getElementById('listaRevisao');
+            const pendentes = transacoesFatura.filter(item => (item.Categoria || 'Outros') === 'Outros').length;
+            document.getElementById('contadorRevisao').innerText = pendentes ? pendentes + ' para revisar' : 'sem pendências';
+            document.getElementById('resumoRevisao').innerText = pendentes
+                ? pendentes + ' lançamento(s) ficaram em Outros. Você pode corrigir categoria, descrição ou valor.'
+                : 'Todas as transações têm categoria. Ainda assim, vale conferir os valores extraídos.';
+
+            lista.innerHTML = '';
+            transacoesFatura.forEach((item, index) => {
+                const row = document.createElement('div');
+                const precisaRevisao = (item.Categoria || 'Outros') === 'Outros';
+                row.className = 'grid grid-cols-1 md:grid-cols-[1fr_180px_140px_44px] gap-2 p-3 rounded-xl border ' +
+                    (precisaRevisao ? 'border-yellow-500/30 bg-yellow-500/5' : 'border-accentgld/10 bg-accentgld/5');
+
+                const descricao = document.createElement('input');
+                descricao.value = item.Lançamento || '';
+                descricao.className = 'w-full bg-transparent border border-accentgld/15 rounded-lg px-3 py-2 text-sm outline-none focus:border-accentorg';
+                descricao.setAttribute('aria-label', 'Descrição da transação');
+                descricao.addEventListener('change', () => atualizarTransacao(index, 'Lançamento', descricao.value));
+
+                const categoria = document.createElement('select');
+                categoria.className = 'bg-bgdark border border-accentgld/15 rounded-lg px-3 py-2 text-sm outline-none focus:border-accentorg';
+                CATEGORIAS_VALIDAS.forEach(nome => {
+                    const option = document.createElement('option');
+                    option.value = nome;
+                    option.textContent = nome;
+                    option.selected = nome === (item.Categoria || 'Outros');
+                    categoria.appendChild(option);
+                });
+                categoria.addEventListener('change', () => atualizarTransacao(index, 'Categoria', categoria.value));
+
+                const valor = document.createElement('input');
+                valor.type = 'number';
+                valor.step = '0.01';
+                valor.min = '0';
+                valor.value = Number(item.Valor || 0).toFixed(2);
+                valor.className = 'bg-bgdark border border-accentgld/15 rounded-lg px-3 py-2 text-sm outline-none focus:border-accentorg ocultavel';
+                valor.setAttribute('aria-label', 'Valor da transação');
+                valor.addEventListener('change', () => atualizarTransacao(index, 'Valor', valor.value));
+
+                const remover = document.createElement('button');
+                remover.className = 'flex items-center justify-center rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-colors min-h-10';
+                remover.title = 'Remover transação';
+                remover.innerHTML = '<i data-lucide="trash-2" class="w-4 h-4"></i>';
+                remover.addEventListener('click', () => removerTransacao(index));
+
+                row.append(descricao, categoria, valor, remover);
+                lista.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        function atualizarTransacao(index, campo, valor) {
+            if (!transacoesFatura[index]) return;
+            transacoesFatura[index][campo] = campo === 'Valor' ? Math.max(0, Number(valor || 0)) : valor;
+            analiseFatura = construirAnaliseAtual(transacoesFatura);
+            gerarVisuais(transacoesFatura, analiseFatura, bancoFatura);
+            renderizarRevisao();
+            if (transacoesComparacao.length) executarComparacao(transacoesComparacao, nomeArquivoComparacao);
+        }
+
+        function removerTransacao(index) {
+            transacoesFatura.splice(index, 1);
+            analiseFatura = construirAnaliseAtual(transacoesFatura);
+            gerarVisuais(transacoesFatura, analiseFatura, bancoFatura);
+            renderizarRevisao();
+            if (transacoesComparacao.length) executarComparacao(transacoesComparacao, nomeArquivoComparacao);
+        }
+
+        function exportarCSV() {
+            if (!transacoesFatura.length) return;
+            const colunas = ['Dia', 'Mes', 'Ano', 'Lançamento', 'Categoria', 'Valor', 'ParcelaAtual', 'ParcelasTotal', 'Banco'];
+            const escapeCSV = value => '"' + String(value ?? '').replaceAll('"', '""') + '"';
+            const linhas = [colunas.join(';')];
+            transacoesFatura.forEach(item => linhas.push(colunas.map(coluna => escapeCSV(item[coluna])).join(';')));
+            const blob = new Blob(['\ufeff' + linhas.join('\n')], {type: 'text/csv;charset=utf-8;'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'fatura-facil-revisada.csv';
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(link.href);
+            link.remove();
+        }
+
+        async function carregarComparacao() {
+            const input = document.getElementById('comparacaoInput');
+            const file = input.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+            nomeArquivoComparacao = file.name;
+
+            try {
+                const processada = await fetch('/processar', {method: 'POST', body: formData});
+                const data = await processada.json();
+                if (!data.sucesso) throw new Error(data.erro || 'Não foi possível ler a segunda fatura.');
+                transacoesComparacao = data.dados || [];
+                await executarComparacao(transacoesComparacao, file.name);
+            } catch (erro) {
+                alert('Não foi possível comparar: ' + erro.message);
+                transacoesComparacao = [];
+                nomeArquivoComparacao = '';
+            } finally {
+                input.value = '';
+            }
+        }
+
+        async function executarComparacao(outraFatura, nomeArquivo) {
+            const response = await fetch('/comparar', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({atual: transacoesFatura, anterior: outraFatura})
+            });
+            const data = await response.json();
+            if (!data.sucesso) throw new Error(data.erro || 'Falha ao comparar faturas.');
+            renderizarComparacao(data.comparacao, nomeArquivo);
+        }
+
+        function renderizarComparacao(comparacao, nomeArquivo) {
+            const painel = document.getElementById('painelComparacao');
+            painel.classList.remove('hidden');
+            document.getElementById('comparacaoSubtitulo').innerText = 'Atual × ' + (nomeArquivo || 'outra fatura') + ' — cálculo local';
+            document.getElementById('comparacaoAtual').innerText = formatarMoeda(comparacao.atual.total);
+            document.getElementById('comparacaoAnterior').innerText = formatarMoeda(comparacao.anterior.total);
+
+            const diff = comparacao.diferenca_total;
+            const diffEl = document.getElementById('comparacaoDiferenca');
+            const sinal = diff > 0 ? '+' : '';
+            const percentual = comparacao.percentual_total === null ? '' : ' (' + (comparacao.percentual_total > 0 ? '+' : '') + comparacao.percentual_total.toFixed(1) + '%)';
+            diffEl.innerText = sinal + formatarMoeda(diff) + percentual;
+            diffEl.className = 'text-xl font-black mt-1 ocultavel ' + (diff > 0 ? 'text-red-400' : diff < 0 ? 'text-accentgrn' : 'text-textlight');
+
+            const insights = [];
+            if (comparacao.maior_aumento) {
+                insights.push('<div class="p-4 rounded-xl border border-red-500/15 bg-red-500/5">Maior aumento: <strong>' +
+                    escapeHtml(comparacao.maior_aumento.categoria) + '</strong> (' + formatarMoeda(comparacao.maior_aumento.diferenca) + ').</div>');
+            }
+            if (comparacao.maior_reducao) {
+                insights.push('<div class="p-4 rounded-xl border border-accentgrn/15 bg-accentgrn/5">Maior redução: <strong>' +
+                    escapeHtml(comparacao.maior_reducao.categoria) + '</strong> (' + formatarMoeda(Math.abs(comparacao.maior_reducao.diferenca)) + ').</div>');
+            }
+            document.getElementById('comparacaoInsights').innerHTML = insights.join('');
+
+            const container = document.getElementById('comparacaoCategorias');
+            container.innerHTML = '';
+            comparacao.categorias.forEach(item => {
+                const linha = document.createElement('div');
+                linha.className = 'grid grid-cols-[1fr_auto_auto] gap-3 items-center p-3 rounded-xl border border-accentgld/10';
+                const nome = document.createElement('span');
+                nome.className = 'text-sm font-semibold';
+                nome.textContent = item.categoria;
+                const valores = document.createElement('span');
+                valores.className = 'text-xs text-accentgld/70 ocultavel';
+                valores.textContent = formatarMoeda(item.anterior) + ' → ' + formatarMoeda(item.atual);
+                const delta = document.createElement('span');
+                delta.className = 'text-xs font-black ocultavel ' + (item.diferenca > 0 ? 'text-red-400' : item.diferenca < 0 ? 'text-accentgrn' : 'text-accentgld');
+                delta.textContent = (item.diferenca > 0 ? '+' : '') + formatarMoeda(item.diferenca);
+                linha.append(nome, valores, delta);
+                container.appendChild(linha);
+            });
+            lucide.createIcons();
+            painel.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        function fecharComparacao() {
+            document.getElementById('painelComparacao').classList.add('hidden');
+            transacoesComparacao = [];
+            nomeArquivoComparacao = '';
+        }
+
+        function gerarVisuais(dadosCSV, analise, banco) {
             const categorias = {};
             dadosCSV.forEach(item => {
                 const cat = item.Categoria ? item.Categoria.toUpperCase() : 'OUTROS';
@@ -614,13 +914,53 @@
                 if(val > 0) { categorias[cat] = (categorias[cat] || 0) + val; }
             });
 
-            resumoMatematico = "RESUMO DOS TOTAIS POR CATEGORIA:\n";
-            for (const [cat, val] of Object.entries(categorias)) {
-                resumoMatematico += `- ${cat}: R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n`;
-            }
-
             const labels = Object.keys(categorias);
             const valores = Object.values(categorias);
+            const positivos = dadosCSV.filter(item => (parseFloat(item.Valor) || 0) > 0);
+            const totalCalculado = positivos.reduce((acc, item) => acc + (parseFloat(item.Valor) || 0), 0);
+            const media = positivos.length ? totalCalculado / positivos.length : 0;
+            const categoriaOrdenada = Object.entries(categorias).sort((a, b) => b[1] - a[1]);
+            const maiorCategoria = categoriaOrdenada[0] || ['—', 0];
+            const top5 = [...positivos].sort((a, b) => parseFloat(b.Valor) - parseFloat(a.Valor)).slice(0, 5);
+            const totalTop5 = top5.reduce((acc, item) => acc + parseFloat(item.Valor || 0), 0);
+            const assinaturas = categorias['ASSINATURAS'] || 0;
+
+            document.getElementById('valorTotal').innerText = formatarMoeda(totalCalculado);
+            document.getElementById('metricTransacoes').innerText = positivos.length;
+            document.getElementById('metricCategoria').innerText = maiorCategoria[0];
+            document.getElementById('metricMedia').innerText = formatarMoeda(media);
+            document.getElementById('metricCobertura').innerText = analise ? (analise.category_coverage + '%') : '—';
+            document.getElementById('badgeBanco').innerText = nomeBanco(banco);
+
+            const pendentesRevisao = positivos.filter(item => (item.Categoria || 'Outros') === 'Outros').length;
+            document.getElementById('resumoRevisao').innerText = pendentesRevisao
+                ? pendentesRevisao + ' lançamento(s) ficaram em Outros e merecem revisão.'
+                : 'Nenhum lançamento ficou sem categoria nesta leitura.';
+
+            const status = document.getElementById('statusAnalise');
+            if (analise && analise.status === 'revisar') {
+                status.innerText = 'Leitura concluída, mas recomendamos revisar as transações.';
+                status.className = 'text-xs text-yellow-500 mt-2';
+            } else {
+                status.innerText = 'Leitura concluída com motor determinístico local.';
+                status.className = 'text-xs text-accentgrn mt-2';
+            }
+
+            const insights = [];
+            if (totalCalculado > 0 && maiorCategoria[1] > 0) {
+                const pct = (maiorCategoria[1] / totalCalculado) * 100;
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5"><span class="font-bold">' + escapeHtml(maiorCategoria[0]) + '</span> concentra <span class="text-accentorg font-black">' + pct.toFixed(1) + '%</span> do total.</div>');
+            }
+            if (totalCalculado > 0 && top5.length) {
+                const pctTop5 = (totalTop5 / totalCalculado) * 100;
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">As 5 maiores compras representam <span class="text-accentorg font-black">' + pctTop5.toFixed(1) + '%</span> da fatura.</div>');
+            }
+            if (assinaturas > 0) {
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">Foram identificados <span class="text-accentorg font-black">' + formatarMoeda(assinaturas) + '</span> em assinaturas.</div>');
+            } else {
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">Nenhum gasto classificado como assinatura nesta leitura.</div>');
+            }
+            document.getElementById('insightsLista').innerHTML = insights.slice(0, 3).join('');
             const coresGrafico = ['#8C52FF', '#00E5FF', '#FFDE59', '#FF914D', '#FF5757', '#00BF63', '#CB6CE6'];
 
             if(meuGrafico) meuGrafico.destroy();
@@ -661,14 +1001,24 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-accentgld/5 transition-colors flex justify-between w-full py-2";
                 tr.innerHTML = `
-                    <td class="font-medium text-textlight w-2/3">${item.Lançamento || item.Descricao || 'Lançamento'} <br> <span class="text-xs text-accentgld font-bold">${item.Categoria || ''}</span></td>
+                    <td class="font-medium text-textlight w-2/3">${escapeHtml(item.Lançamento || item.Descricao || 'Lançamento')} <br> <span class="text-xs text-accentgld font-bold">${escapeHtml(item.Categoria || '')}</span></td>
                     <td class="text-right font-black text-accentorg w-1/3 flex items-center justify-end ocultavel ${classeBlur}">R$ ${parseFloat(item.Valor).toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
                 `;
                 tabelaBody.appendChild(tr);
             });
+
+            if (!document.getElementById('painelRevisao').classList.contains('hidden')) {
+                renderizarRevisao();
+            }
         }
 
-        async function perguntarIA() {
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function perguntarFatura() {
             const input = document.getElementById('pergunta');
             const chatBox = document.getElementById('chatBox');
             if(!input.value) return;
@@ -679,65 +1029,42 @@
             chatBox.innerHTML += `
                 <div class="flex justify-end w-full mt-4">
                     <div class="bg-accentorg text-white p-4 rounded-2xl rounded-tr-none max-w-[85%] text-base shadow-lg ocultavel ${classeBlur}">
-                        ${pergunta}
+                        ${escapeHtml(pergunta)}
                     </div>
                 </div>`;
                 
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            chatBox.innerHTML += `<div id="digitando" class="text-accentgld text-xs ml-2 animate-pulse mt-2">O Consultor está digitando...</div>`;
+            chatBox.innerHTML += `<div id="digitando" class="text-accentgld text-xs ml-2 animate-pulse mt-2">Analisando a fatura...</div>`;
 
             try {
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ pergunta: pergunta, contexto: contextoFatura, resumo: resumoMatematico })
+                    body: JSON.stringify({ pergunta: pergunta, transacoes: transacoesFatura })
                 });
                 const data = await response.json();
                 
                 document.getElementById('digitando').remove();
-                const respostaFormatada = marked.parse(data.resposta);
+                const respostaFormatada = DOMPurify.sanitize(marked.parse(data.resposta));
 
                 chatBox.innerHTML += `
                     <div class="flex justify-start w-full mt-2">
-                        <div class="p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight ia-formatada text-base shadow-lg ocultavel ${classeBlur}" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                        <div class="p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight resposta-formatada text-base shadow-lg ocultavel ${classeBlur}" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
                             ${respostaFormatada}
                         </div>
                     </div>`;
             } catch (e) {
                 if(document.getElementById('digitando')) document.getElementById('digitando').remove();
-                chatBox.innerHTML += `<div class="text-red-500 text-xs mt-2">Erro ao conectar com a IA.</div>`;
+                chatBox.innerHTML += `<div class="text-red-500 text-xs mt-2">Erro ao consultar os dados da fatura.</div>`;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         document.getElementById("pergunta").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { event.preventDefault(); perguntarIA(); }
+            if (event.key === "Enter") { event.preventDefault(); perguntarFatura(); }
         });
-
-        function abrirModalFeedback() {
-            document.getElementById('modalFeedback').classList.remove('hidden');
-        }
-
-        function fecharModalFeedback() {
-            document.getElementById('modalFeedback').classList.add('hidden');
-
-            document.getElementById('feedNome').value = '';
-            document.getElementById('feedBanco').value = '';
-            document.getElementById('feedAvisar').checked = false;
-            document.getElementById('feedContato').value = '';
-            toggleContato();
-        }
-
-        function toggleContato() {
-            const divContato = document.getElementById('divContato');
-            if(document.getElementById('feedAvisar').checked) {
-                divContato.classList.remove('hidden');
-            } else {
-                divContato.classList.add('hidden');
-            }
-        }
 
         function abrirModalFeedback() {
             document.getElementById('modalFeedback').classList.remove('hidden');
