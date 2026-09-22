@@ -74,11 +74,11 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--color-gld); border-radius: 10px; }
 
-        .ia-formatada p { margin-bottom: 0.75rem; line-height: 1.6; }
-        .ia-formatada strong { font-weight: 800; color: var(--color-org); }
-        .ia-formatada ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .ia-formatada ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
-        .ia-formatada li { margin-bottom: 0.25rem; }
+        .resposta-formatada p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .resposta-formatada strong { font-weight: 800; color: var(--color-org); }
+        .resposta-formatada ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .resposta-formatada ol { list-style-type: decimal; margin-left: 1.5rem; margin-bottom: 1rem; }
+        .resposta-formatada li { margin-bottom: 0.25rem; }
 
         .privacidade-blur { filter: blur(12px); opacity: 0.5; user-select: none; pointer-events: none; transition: all 0.3s ease; }
         .ocultavel { transition: all 0.3s ease; }
@@ -390,7 +390,7 @@
                     </div>
 
                     <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
-                        <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel"
+                        <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight resposta-formatada ocultavel"
                             style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
                             Sua fatura foi estruturada localmente. Posso consultar e calcular os dados sem usar uma IA externa.
                         </div>
@@ -518,11 +518,11 @@
                 </details>
                 <details name="faq" class="group bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 p-4 transition-all">
                 <summary class="list-none cursor-pointer flex justify-between items-center text-slate-800 dark:text-white font-semibold">
-                    A IA tem acesso aos meus dados bancários?
+                    O Fatura Fácil envia minha fatura para alguma IA?
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform group-open:rotate-180 text-accentorg"></i>
                 </summary>
                     <p class="mt-3 text-slate-600 dark:text-textlight/70 text-sm leading-relaxed">
-                        A IA processa apenas as descrições e valores das transações que o utilizador carrega para fornecer as análises. Não existe qualquer ligação direta com a sua conta bancária real.
+                        Não. A versão atual usa parsers e regras locais no servidor para estruturar e analisar a fatura. Nenhum conteúdo é enviado a Gemini, OpenAI, Claude ou outro modelo de IA.
                     </p>
                 </details>
                    
@@ -1064,7 +1064,7 @@
 
                 chatBox.innerHTML += `
                     <div class="flex justify-start w-full mt-2">
-                        <div class="p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight ia-formatada text-base shadow-lg ocultavel ${classeBlur}" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                        <div class="p-5 rounded-2xl rounded-tl-none max-w-[90%] text-textlight resposta-formatada text-base shadow-lg ocultavel ${classeBlur}" style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
                             ${respostaFormatada}
                         </div>
                     </div>`;
