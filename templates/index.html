@@ -171,7 +171,7 @@
                 <div class="mt-12 text-center animate-in delay-3">
                     <div id="bancosCompativeis" class="mt-12 text-center animate-in delay-3">
                         <p class="text-[10px] text-accentgld/50 uppercase tracking-widest mb-4 font-semibold">
-                            Faturas testadas e otimizadas
+                            Parsers em validação
                         </p>
                         <div class="flex flex-wrap justify-center gap-4">
 
@@ -632,8 +632,7 @@
         let bancoFatura = 'fatura';
         let transacoesComparacao = [];
         let nomeArquivoComparacao = '';
-        let resumoMatematico = ""; 
-        let meuGrafico = null; 
+                let meuGrafico = null; 
         let privacidadeAtiva = false;
 
         function togglePrivacidade() {
@@ -688,13 +687,6 @@
                         bancoFatura = data.banco || (data.tipo === 'csv' ? 'csv' : 'fatura');
                         gerarVisuais(data.dados, analiseFatura, bancoFatura);
                         mudarAba('dash');
-                    } else if (data.tipo === 'pdf') {
-                        document.getElementById('valorTotal').innerText = "Analisado!";
-                        document.getElementById('containerGrafico').innerHTML = "<p class='text-center text-accentgld mt-10'>Gráficos detalhados otimizados apenas para CSV.</p>";
-                        document.getElementById('tabelaGastos').innerHTML = "<tr><td colspan='2' class='py-4 text-center text-accentgld'>Fatura lida. Acesse o chat ao lado!</td></tr>";
-                        transacoesFatura = [];
-                        resumoMatematico = "Fatura em texto bruto. Extraia os valores da conversa.";
-                        mudarAba('chat');
                     }
                 } else {
                     alert('Erro: ' + data.erro);
@@ -921,11 +913,6 @@
                 const val = parseFloat(item.Valor) || 0;
                 if(val > 0) { categorias[cat] = (categorias[cat] || 0) + val; }
             });
-
-            resumoMatematico = "RESUMO DOS TOTAIS POR CATEGORIA:\n";
-            for (const [cat, val] of Object.entries(categorias)) {
-                resumoMatematico += `- ${cat}: R$ ${val.toLocaleString('pt-BR', {minimumFractionDigits: 2})}\n`;
-            }
 
             const labels = Object.keys(categorias);
             const valores = Object.values(categorias);
