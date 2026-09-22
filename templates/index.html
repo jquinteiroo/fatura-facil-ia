@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:image" content="C:\Users\jquinteiro\Documents\GitHub\WIS-homolog\faturafacil (1).jpg" />
     <meta property="og:title" content="Fatura Fácil" />
     <meta property="og:description" content="Entenda seus gastos com uma análise privada, simples e sem depender de IA." />
     <title>Fatura Fácil</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>\n    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <link rel="icon"
@@ -222,9 +222,8 @@
                 <nav class="flex justify-between items-center pb-2">
                     <div class="flex gap-2 md:gap-8">
                         <button onclick="mudarAba('dash')" id="btnDash"
-                            class="tab-btn tab-active text-sm md:text-base">📊 Dashboard</button>
-                        <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">🤖 Chat com
-                            a IA</button>
+                            class="tab-btn tab-active text-sm md:text-base">📊 Resumo</button>
+                        <button onclick="mudarAba('chat')" id="btnChat" class="tab-btn text-sm md:text-base">💬 Pergunte à fatura</button>
                     </div>
 
                     <div class="flex items-center gap-2 md:gap-4">
@@ -243,17 +242,48 @@
                 </nav>
 
                 <div id="abaDash" class="space-y-6 animate-in fade-in duration-500">
-                    <div
-                        class="glass-card p-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left gap-4">
-                        <div>
-                            <p class="text-accentgld uppercase tracking-widest text-sm font-bold">Total Gasto</p>
-                            <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00
-                            </h2>
+                    <div class="glass-card p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row md:items-end justify-between gap-5">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                    <span id="badgeBanco" class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border border-accentgld/30 text-accentgld">Fatura</span>
+                                    <span class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-accentgrn/15 text-accentgrn border border-accentgrn/20">Processamento local</span>
+                                </div>
+                                <p class="text-accentgld uppercase tracking-widest text-xs font-bold">Total identificado</p>
+                                <h2 id="valorTotal" class="text-4xl md:text-5xl font-black text-accentorg ocultavel">R$ 0,00</h2>
+                                <p id="statusAnalise" class="text-xs text-accentgld/70 mt-2">Analisando transações...</p>
+                            </div>
+                            <p class="text-xs text-accentgld/60 max-w-sm md:text-right">
+                                Nenhuma informação da fatura é enviada a um modelo de IA.
+                            </p>
                         </div>
-                        <div
-                            class="bg-accentgrn text-bgdark px-4 py-2 rounded-lg font-bold shadow-lg shadow-accentgrn/20">
-                            Análise Concluída
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Transações</p>
+                            <p id="metricTransacoes" class="text-2xl font-black text-textlight mt-1">0</p>
                         </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Maior categoria</p>
+                            <p id="metricCategoria" class="text-lg font-black text-textlight mt-1 truncate">—</p>
+                        </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Média por compra</p>
+                            <p id="metricMedia" class="text-xl font-black text-textlight mt-1 ocultavel">R$ 0,00</p>
+                        </div>
+                        <div class="glass-card p-4 md:p-5">
+                            <p class="text-[10px] uppercase tracking-widest text-accentgld/70 font-bold">Categorização</p>
+                            <p id="metricCobertura" class="text-xl font-black text-accentgrn mt-1">0%</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-5 md:p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-accentorg"></i>
+                            <h3 class="font-bold text-textlight">Destaques da fatura</h3>
+                        </div>
+                        <div id="insightsLista" class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm"></div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -295,10 +325,20 @@
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        <p class="text-[10px] uppercase tracking-widest text-accentgld/60 font-bold mb-2">Perguntas rápidas</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button onclick="usarPergunta('Onde gastei mais?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Onde gastei mais?</button>
+                            <button onclick="usarPergunta('Quais foram minhas 5 maiores compras?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">5 maiores compras</button>
+                            <button onclick="usarPergunta('Quanto gastei com assinaturas?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Assinaturas</button>
+                            <button onclick="usarPergunta('Qual foi minha maior compra?')" class="px-3 py-2 rounded-full border border-accentgld/20 text-xs hover:border-accentorg hover:text-accentorg transition-colors">Maior compra</button>
+                        </div>
+                    </div>
+
                     <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-4 text-sm pr-2">
                         <div class="p-4 rounded-2xl rounded-tl-none max-w-[85%] text-textlight ia-formatada ocultavel"
                             style="background: var(--glass-bg); border: 1px solid var(--glass-border);">
-                            Olá! Fatura analisada com sucesso. O que você gostaria de saber?
+                            Sua fatura foi estruturada localmente. Posso consultar e calcular os dados sem usar uma IA externa.
                         </div>
                     </div>
 
@@ -306,7 +346,7 @@
                         style="border: 1px solid var(--glass-border);">
                         <input type="text" id="pergunta" placeholder="Ex: Quanto gastei com comida?"
                             class="flex-1 bg-transparent px-4 py-3 text-textlight outline-none text-base">
-                        <button onclick="perguntarIA()"
+                        <button onclick="perguntarFatura()"
                             class="bg-accentorg hover:bg-[#ff7b5c] px-6 py-2 rounded-xl transition-colors font-bold text-white shadow-lg">
                             <i data-lucide="send" class="w-6 h-6"></i>
                         </button>
@@ -533,7 +573,9 @@
         inicializarTema(); 
         lucide.createIcons();
         
-        let transacoesFatura = []; 
+        let transacoesFatura = [];
+        let analiseFatura = null;
+        let bancoFatura = 'fatura';
         let resumoMatematico = ""; 
         let meuGrafico = null; 
         let privacidadeAtiva = false;
@@ -585,8 +627,10 @@
                 if (data.sucesso) {
                     if(data.tipo === 'csv' || data.tipo === 'pdf_estruturado') {
                         document.getElementById('valorTotal').innerText = `R$ ${data.total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-                        transacoesFatura = data.dados; 
-                        gerarVisuais(data.dados);
+                        transacoesFatura = data.dados;
+                        analiseFatura = data.analise || null;
+                        bancoFatura = data.banco || (data.tipo === 'csv' ? 'csv' : 'fatura');
+                        gerarVisuais(data.dados, analiseFatura, bancoFatura);
                         mudarAba('dash');
                     } else if (data.tipo === 'pdf') {
                         document.getElementById('valorTotal').innerText = "Analisado!";
@@ -606,7 +650,21 @@
             }
         }
 
-        function gerarVisuais(dadosCSV) {
+        function formatarMoeda(valor) {
+            return 'R$ ' + Number(valor || 0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+
+        function nomeBanco(valor) {
+            const nomes = {nubank: 'Nubank', inter: 'Inter', mercado_pago: 'Mercado Pago', sicredi: 'Sicredi', csv: 'CSV'};
+            return nomes[valor] || 'Formato genérico';
+        }
+
+        function usarPergunta(texto) {
+            document.getElementById('pergunta').value = texto;
+            perguntarFatura();
+        }
+
+        function gerarVisuais(dadosCSV, analise, banco) {
             const categorias = {};
             dadosCSV.forEach(item => {
                 const cat = item.Categoria ? item.Categoria.toUpperCase() : 'OUTROS';
@@ -621,6 +679,45 @@
 
             const labels = Object.keys(categorias);
             const valores = Object.values(categorias);
+            const positivos = dadosCSV.filter(item => (parseFloat(item.Valor) || 0) > 0);
+            const totalCalculado = positivos.reduce((acc, item) => acc + (parseFloat(item.Valor) || 0), 0);
+            const media = positivos.length ? totalCalculado / positivos.length : 0;
+            const categoriaOrdenada = Object.entries(categorias).sort((a, b) => b[1] - a[1]);
+            const maiorCategoria = categoriaOrdenada[0] || ['—', 0];
+            const top5 = [...positivos].sort((a, b) => parseFloat(b.Valor) - parseFloat(a.Valor)).slice(0, 5);
+            const totalTop5 = top5.reduce((acc, item) => acc + parseFloat(item.Valor || 0), 0);
+            const assinaturas = categorias['ASSINATURAS'] || 0;
+
+            document.getElementById('metricTransacoes').innerText = positivos.length;
+            document.getElementById('metricCategoria').innerText = maiorCategoria[0];
+            document.getElementById('metricMedia').innerText = formatarMoeda(media);
+            document.getElementById('metricCobertura').innerText = analise ? (analise.category_coverage + '%') : '—';
+            document.getElementById('badgeBanco').innerText = nomeBanco(banco);
+
+            const status = document.getElementById('statusAnalise');
+            if (analise && analise.status === 'revisar') {
+                status.innerText = 'Leitura concluída, mas recomendamos revisar as transações.';
+                status.className = 'text-xs text-yellow-500 mt-2';
+            } else {
+                status.innerText = 'Leitura concluída com motor determinístico local.';
+                status.className = 'text-xs text-accentgrn mt-2';
+            }
+
+            const insights = [];
+            if (totalCalculado > 0 && maiorCategoria[1] > 0) {
+                const pct = (maiorCategoria[1] / totalCalculado) * 100;
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5"><span class="font-bold">' + escapeHtml(maiorCategoria[0]) + '</span> concentra <span class="text-accentorg font-black">' + pct.toFixed(1) + '%</span> do total.</div>');
+            }
+            if (totalCalculado > 0 && top5.length) {
+                const pctTop5 = (totalTop5 / totalCalculado) * 100;
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">As 5 maiores compras representam <span class="text-accentorg font-black">' + pctTop5.toFixed(1) + '%</span> da fatura.</div>');
+            }
+            if (assinaturas > 0) {
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">Foram identificados <span class="text-accentorg font-black">' + formatarMoeda(assinaturas) + '</span> em assinaturas.</div>');
+            } else {
+                insights.push('<div class="p-4 rounded-xl border border-accentgld/15 bg-accentgld/5">Nenhum gasto classificado como assinatura nesta leitura.</div>');
+            }
+            document.getElementById('insightsLista').innerHTML = insights.slice(0, 3).join('');
             const coresGrafico = ['#8C52FF', '#00E5FF', '#FFDE59', '#FF914D', '#FF5757', '#00BF63', '#CB6CE6'];
 
             if(meuGrafico) meuGrafico.destroy();
@@ -674,7 +771,7 @@
             return div.innerHTML;
         }
 
-        async function perguntarIA() {
+        async function perguntarFatura() {
             const input = document.getElementById('pergunta');
             const chatBox = document.getElementById('chatBox');
             if(!input.value) return;
@@ -685,7 +782,7 @@
             chatBox.innerHTML += `
                 <div class="flex justify-end w-full mt-4">
                     <div class="bg-accentorg text-white p-4 rounded-2xl rounded-tr-none max-w-[85%] text-base shadow-lg ocultavel ${classeBlur}">
-                        ${pergunta}
+                        ${escapeHtml(pergunta)}
                     </div>
                 </div>`;
                 
@@ -713,13 +810,13 @@
                     </div>`;
             } catch (e) {
                 if(document.getElementById('digitando')) document.getElementById('digitando').remove();
-                chatBox.innerHTML += `<div class="text-red-500 text-xs mt-2">Erro ao conectar com a IA.</div>`;
+                chatBox.innerHTML += `<div class="text-red-500 text-xs mt-2">Erro ao consultar os dados da fatura.</div>`;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         document.getElementById("pergunta").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") { event.preventDefault(); perguntarIA(); }
+            if (event.key === "Enter") { event.preventDefault(); perguntarFatura(); }
         });
 
         function abrirModalFeedback() {
