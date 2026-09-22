@@ -27,3 +27,17 @@ jobs:
 
       - name: Run tests
         run: pytest -q
+
+      - name: Check inline JavaScript syntax
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          html = Path("templates/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script(?:\s[^>]*)?>(.*?)</script>", html, flags=re.S)
+          inline = [script for script in scripts if script.strip()]
+          Path("/tmp/fatura-facil-inline.js").write_text("\n".join(inline), encoding="utf-8")
+          PY
+          node --check /tmp/fatura-facil-inline.js
