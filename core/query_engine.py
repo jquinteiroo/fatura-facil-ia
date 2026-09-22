@@ -44,9 +44,9 @@ def build_summary(transactions: list[dict]) -> dict:
 def _category_from_question(question: str):
     normalized = _normalize(question)
     aliases = {
-        "Alimentação": ("alimentacao", "comida", "restaurante", "ifood"),
+        "Alimentação": ("alimentacao", "comida", "restaurante"),
         "Mercado": ("mercado", "supermercado"),
-        "Transporte": ("transporte", "uber", "combustivel", "gasolina"),
+        "Transporte": ("transporte", "combustivel", "gasolina"),
         "Moradia": ("moradia", "casa", "aluguel"),
         "Saúde": ("saude", "farmacia", "medico"),
         "Educação": ("educacao", "curso", "faculdade"),
@@ -71,12 +71,7 @@ def answer_question(question: str, transactions: list[dict]) -> str:
     if not txs:
         return "Ainda não encontrei transações válidas nesta fatura."
 
-    if any(term in q for term in ("quanto gastei no total", "total da fatura", "total gasto", "quanto gastei")):
-        category = _category_from_question(question)
-        if category:
-            value = summary["by_category"].get(category, 0.0)
-            percentage = (value / summary["total"] * 100) if summary["total"] else 0
-            return f"Você gastou **{_money(value)}** em **{category}**, equivalente a **{percentage:.1f}%** da fatura."
+    if any(term in q for term in ("quanto gastei no total", "total da fatura", "total gasto", "valor total")):
         return f"O total das transações identificadas é **{_money(summary['total'])}**."
 
     category = _category_from_question(question)
