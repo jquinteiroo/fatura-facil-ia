@@ -19,6 +19,7 @@ def test_parse_transactions_and_ignore_payment():
     13 SET UBER *TRIP 21,50
     14 SET PAGAMENTO DE FATURA 500,00
     15/09 NETFLIX.COM 39,90
+    LIMITE TOTAL 9.999,00
     """
     result = parse_transactions(text)
     assert result["bank"] == "nubank"

@@ -115,10 +115,9 @@ def _transaction_from_line(line: str, bank: str):
 
     prefix = line[:amount_match.start()].strip()
     date_info = _extract_date(prefix)
-    if date_info:
-        description_source = prefix[date_info["end"]:].strip()
-    else:
-        description_source = prefix
+    if not date_info:
+        return None
+    description_source = prefix[date_info["end"]:].strip()
 
     if len(description_source) < 2:
         return None

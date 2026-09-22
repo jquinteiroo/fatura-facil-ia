@@ -7,7 +7,7 @@ import PyPDF2
 from flask import Flask, jsonify, render_template, request
 
 from core.categories import categorize
-from core.parser import parse_transactions
+from core.parser import parse_amount, parse_transactions
 from core.query_engine import answer_question
 
 app = Flask(__name__)
@@ -39,15 +39,13 @@ def _normalize_csv(file):
 
 def _parse_csv(file):
     frame = _normalize_csv(file)
-    frame["Valor"] = (
-        frame["Valor"]
-        .astype(str)
-        .str.replace("R$", "", regex=False)
-        .str.replace(" ", "", regex=False)
-        .str.replace(".", "", regex=False)
-        .str.replace(",", ".", regex=False)
-    )
-    frame["Valor"] = pd.to_numeric(frame["Valor"], errors="coerce")
+    def parse_csv_amount(value):
+        try:
+            return parse_amount(str(value))
+        except (TypeError, ValueError):
+            return None
+
+    frame["Valor"] = frame["Valor"].map(parse_csv_amount)
     frame = frame.dropna(subset=["Valor"])
 
     if "Lançamento" not in frame.columns:

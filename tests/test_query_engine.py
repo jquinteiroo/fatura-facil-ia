@@ -22,3 +22,9 @@ def test_total_question():
 def test_category_question():
     answer = answer_question("Quanto gastei com alimentação?", TXS)
     assert "R$ 50,00" in answer
+
+
+def test_merchant_question_is_not_category_total():
+    answer = answer_question("Quanto gastei no iFood?", TXS)
+    assert "R$ 50,00" in answer
+    assert "lançamento" in answer.lower()
