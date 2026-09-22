@@ -7,6 +7,7 @@ import PyPDF2
 from flask import Flask, jsonify, render_template, request
 
 from core.categories import categorize
+from core.comparison import compare_transactions
 from core.parser import build_analysis, parse_amount, parse_transactions
 from core.query_engine import answer_question
 
@@ -18,6 +19,20 @@ ALLOWED_EXTENSIONS = {"pdf", "csv"}
 
 def _allowed_file(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def _validate_signature(file, filename: str) -> bool:
+    file.seek(0)
+    header = file.read(5)
+    file.seek(0)
+
+    if filename.endswith(".pdf"):
+        return header.startswith(b"%PDF-")
+
+    if filename.endswith(".csv"):
+        return b"\x00" not in header
+
+    return False
 
 
 def _normalize_csv(file):
@@ -96,6 +111,9 @@ def processar():
     if not filename or not _allowed_file(filename):
         return jsonify({"erro": "Formato não suportado. Envie uma fatura PDF ou CSV."}), 400
 
+    if not _validate_signature(file, filename):
+        return jsonify({"erro": "O conteúdo do arquivo não corresponde ao formato informado."}), 400
+
     try:
         if filename.endswith(".csv"):
             records, total = _parse_csv(file)
@@ -153,6 +171,22 @@ def chat():
 
     return jsonify({
         "resposta": answer_question(question, transactions),
+        "motor": "local",
+    })
+
+
+@app.route("/comparar", methods=["POST"])
+def comparar():
+    payload = request.get_json(silent=True) or {}
+    atual = payload.get("atual")
+    anterior = payload.get("anterior")
+
+    if not isinstance(atual, list) or not isinstance(anterior, list):
+        return jsonify({"erro": "Envie duas listas de transações para comparar."}), 400
+
+    return jsonify({
+        "sucesso": True,
+        "comparacao": compare_transactions(atual, anterior),
         "motor": "local",
     })
 
