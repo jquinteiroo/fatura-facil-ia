@@ -7,7 +7,7 @@ import PyPDF2
 from flask import Flask, jsonify, render_template, request
 
 from core.categories import categorize
-from core.parser import parse_amount, parse_transactions
+from core.parser import build_analysis, parse_amount, parse_transactions
 from core.query_engine import answer_question
 
 app = Flask(__name__)
@@ -104,6 +104,8 @@ def processar():
                 "tipo": "csv",
                 "dados": records,
                 "total": total,
+                "banco": "csv",
+                "analise": build_analysis(records, "csv", "csv"),
                 "motor": "local",
             })
 
@@ -130,6 +132,7 @@ def processar():
             "dados": result["transactions"],
             "total": result["total"],
             "banco": result["bank"],
+            "analise": result["analysis"],
             "motor": "local",
         })
     except Exception as exc:

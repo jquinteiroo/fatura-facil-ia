@@ -5,6 +5,7 @@ def test_amount_formats():
     assert parse_amount("1.234,56") == 1234.56
     assert parse_amount("48,90") == 48.90
     assert parse_amount("48.90") == 48.90
+    assert parse_amount("(48,90)") == -48.90
 
 
 def test_detect_bank():
@@ -26,3 +27,4 @@ def test_parse_transactions_and_ignore_payment():
     assert len(result["transactions"]) == 3
     assert result["total"] == 110.30
     assert result["transactions"][0]["Categoria"] == "Alimentação"
+    assert result["analysis"]["transactions_count"] == 3
